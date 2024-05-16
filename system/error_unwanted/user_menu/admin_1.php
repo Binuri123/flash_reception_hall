@@ -1,0 +1,125 @@
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+    <div class="position-sticky pt-3 sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="<?= SYSTEM_PATH ?>index.php">
+                    <?= $_SESSION['user_role'] ?>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="<?= SYSTEM_PATH ?>index.php">
+                    <i class="bi bi-house"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>users/users.php">
+                    <i class="bi bi-person-circle"></i>
+                    Users
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>supplier/supplier.php">
+                    <i class="bi bi-people-fill"></i>
+                    Suppliers
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>reservation/reservation.php">
+                    <i class="bi bi-pencil-square"></i>
+                    Reservations
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>hall/hall.php">
+                    <i class="bi bi-shop"></i>
+                    Halls
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>package/package.php">
+                    <i class="bi bi-journal-album"></i>
+                    Packages
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>menu_package/menu.php">
+                    <i class="bi bi-journal-text"></i>
+                    Menus
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>service/service.php">
+                    <i class="bi bi-list-check"></i>
+                    Services
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>customer_payment/customer_payment.php">
+                    <i class="bi bi-cash-stack"></i>
+                    Customer Payments
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>supplier_payment/supplier_payment.php">
+                    <i class="bi bi-currency-dollar"></i>
+                    Supplier Payments
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>arrangement_plan/arrangement_plan.php">
+                    <i class="bi bi-journal-richtext"></i>
+                    Arrangement Plan
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>event_calendar/event_calendar.php">
+                    <i class="bi bi-calendar-check"></i>
+                    Event Calendar
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>event_calendar/event_calendar.php">
+                    <i class="bi bi-cash-coin"></i>
+                    Refunds
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>event_calendar/event_calendar.php">
+                    <i class="bi bi-person-check-fill"></i>
+                    Attendance
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>event_calendar/event_calendar.php">
+                    <i class="bi bi-cart-plus"></i>
+                    Additional Purchases
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>event_calendar/event_calendar.php">
+                    <i class="bi bi-star"></i>
+                    Reviews
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>report/report.php">
+                    <i class="bi bi-bar-chart-fill"></i>
+                    Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>tax_and_discounts/tax_and_discounts.php">
+                    <i class="bi bi-percent"></i>
+                    Tax and Discounts
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= SYSTEM_PATH ?>terms_and_conditions/terms_and_conditions.php">
+                    <i class="bi bi-stack"></i>
+                    Terms & Conditions
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
