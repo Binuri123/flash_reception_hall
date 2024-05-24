@@ -25,7 +25,6 @@ include '../customer/sidebar.php';
             // 3rd step- clean input
             $resno = cleanInput($resno);
             $event = cleanInput($event);
-            $guest = cleanInput($guest);
             $hall = cleanInput($hall);
             if (!empty($resno)) {
                 $where .= " reservation_no LIKE '%$resno%' AND";
@@ -38,9 +37,6 @@ include '../customer/sidebar.php';
             }
             if (!empty($resdatestart) && !empty($resdateend)) {
                 $where .= " event_date BETWEEN '$resdatestart' AND '$resdateend' AND";
-            }
-            if (!empty($guest)) {
-                $where .= " guest_count LIKE '%$guest%' AND";
             }
             if (!empty($hall)) {
                 $where .= " h.hall_id = '$hall' AND";
@@ -88,36 +84,6 @@ include '../customer/sidebar.php';
                     </select>
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="Guest" name="guest" style="font-size:13px;">
-                </div>
-                <div class="col">
-                    <?php
-                    $db = dbConn();
-                    $sql = "SELECT * FROM hall";
-                    $result = $db->query($sql);
-                    ?>
-                    <select class="form-select" id="hall" name="hall" style="font-size:13px;">
-                        <option value="">Select Hall</option>
-                        <?php
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                ?>
-                                <option value=<?= $row['hall_id']; ?> <?php if ($row['hall_id'] == @$hall) { ?>selected <?php } ?>><?= $row['hall_name'] ?></option>
-                                <?php
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-3">
-                    <input type="date" class="form-control" placeholder="Date" name="resdatestart" style="font-size:13px;">
-                </div>
-                <div class="col-md-3">
-                    <input type="date" class="form-control" placeholder="Date" name="resdateend" style="font-size:13px;">
-                </div>
-                <div class="col-md-3">
                     <?php
                     $db = dbConn();
                     $sql = "SELECT * FROM reservation_status";
@@ -139,9 +105,40 @@ include '../customer/sidebar.php';
                         ?>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-warning btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-search"> Search</i></button>
+                <div class="col">
+                    <?php
+                    $db = dbConn();
+                    $sql = "SELECT * FROM hall";
+                    $result = $db->query($sql);
+                    ?>
+                    <select class="form-select" id="hall" name="hall" style="font-size:13px;">
+                        <option value="">Select Hall</option>
+                        <?php
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                ?>
+                                <option value=<?= $row['hall_id']; ?> <?php if ($row['hall_id'] == @$hall) { ?>selected <?php } ?>><?= $row['hall_name'] ?></option>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
+            </div>
+            <div class="row mb-3 align-items-end">
+                <div class="col-md-3">
+                    <label style="font-size:13px;">From:</label>
+                    <input type="date" class="form-control" placeholder="Date" name="resdatestart" style="font-size:13px;">
+                </div>
+                <div class="col-md-3">
+                    <label style="font-size:13px;">To:</label>
+                    <input type="date" class="form-control" placeholder="Date" name="resdateend" style="font-size:13px;">
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-warning btn-sm" style="font-size:13px;width:120px;"><i class="bi bi-search"> Search</i></button>
+                    <a href="<?= $_SERVER['PHP_SELF']?>" class="btn btn-info btn-sm" style="font-size:13px;width:120px;margin-left:8px;"><i class="bi bi-eraser"> Clear</i></a>
+                </div>
+                
             </div>
         </form>
         <div class="table-responsive">

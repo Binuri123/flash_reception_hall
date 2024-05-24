@@ -226,12 +226,13 @@ include '../customer/sidebar.php';
                                                             <div class="col-md-5 mb-3">
                                                                 <?php
                                                                 $db = dbConn();
-                                                                $sql_taxes = "SELECT * FROM tax";
+                                                                $sql_taxes = "SELECT * FROM tax ORDER BY amount DESC";
                                                                 $result_taxes = $db->query($sql_taxes);
                                                                 $old = 0;
+                                                                $tax=0;
                                                                 while ($row_taxes = $result_taxes->fetch_assoc()) {
                                                                     $new_amount = $row_taxes['tax_rate'];
-                                                                    if ($total_reservation_amount > $old && $total_reservation_amount <= $row_taxes['amount']) {
+                                                                    if ($total_reservation_amount > $old && $total_reservation_amount >= $row_taxes['amount']) {
                                                                         $tax = $row_taxes['tax_rate'];
                                                                         break;
                                                                     }
