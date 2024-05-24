@@ -13,7 +13,7 @@ include '../customer/sidebar.php';
                     <li class="breadcrumb-item active">Reservation History</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
         <?php
         $where = null;
         extract($_POST);
@@ -57,11 +57,11 @@ include '../customer/sidebar.php';
         <div class="row">
             <div class="col-md-12">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
-                    <div class="row">
-                        <div class="col-md-2 mb-3">
+                    <div class="row align-items-end">
+                        <div class="col">
                             <input type="text" name="reservation_no" value="<?= @$reservation_no ?>" placeholder="Reservation No" style="font-size:13px;" class="form-control">
                         </div>
-                        <div class="col-md-2 mb-3">
+                        <div class="col">
                             <?php
                             $db = dbConn();
                             $sql = "SELECT * FROM event";
@@ -80,7 +80,7 @@ include '../customer/sidebar.php';
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col">
                             <?php
                             $db = dbConn();
                             $sql = "SELECT * FROM hall";
@@ -99,7 +99,7 @@ include '../customer/sidebar.php';
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col">
                             <?php
                             $db = dbConn();
                             $sql = "SELECT * FROM reservation_status";
@@ -118,7 +118,9 @@ include '../customer/sidebar.php';
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-2 mb-3">
+                    </div>
+                    <div class="row align-items-end mb-3">
+                        <div class="col">
                             <?php
                             $db = dbConn();
                             $sql = "SELECT * FROM reservation_payment_status";
@@ -137,31 +139,21 @@ include '../customer/sidebar.php';
                                 ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="row">
-                                <div class='col-md-3'>
-                                    <label class="form-label" style="font-size:13px;">Start Date</label>
-                                </div>
-                                <div class='col-md-9'>
-                                    <input type="date" name="start_date" value="<?= @$start_date ?>" placeholder="Start Date" style="font-size:13px;" class="form-control">
-                                </div>
-                            </div>
+                        <div class="col">
+                            <label class="form-label" style="font-size:13px;"><b>From</b></label>
+                            <input type="date" name="start_date" value="<?= @$start_date ?>" placeholder="Start Date" style="font-size:13px;" class="form-control">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="row">
-                                <div class='col-md-3'>
-                                    <label class="form-label" style="font-size:13px;">End Date</label>
-                                </div>
-                                <div class='col-md-9'>
-                                    <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;" class="form-control">
-                                </div>
-                            </div>
+                        <div class="col">
+                            <label class="form-label" style="font-size:13px;"><b>To</b></label>
+                            <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;" class="form-control">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-search"></i> Search</button>
-                            <a href="<?= WEB_PATH ?>reservation/reservation_history.php" class="btn btn-info btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-eraser"></i> Clear</a>
+                        <div class="col">
+                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:115px;">
+                                <i class="bi bi-search"></i> Search
+                            </button>
+                            <a href="<?= $_SERVER['PHP_SELF']?>" class="btn btn-info btn-sm" style="font-size:13px;width:115px;margin-left:10px;">
+                                <i class="bi bi-eraser"></i> Clear
+                            </a>
                         </div>
                     </div>
                 </form>

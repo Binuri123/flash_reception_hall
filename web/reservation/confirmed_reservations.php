@@ -13,7 +13,7 @@ include '../customer/sidebar.php';
                     <li class="breadcrumb-item active">Confirmed Reservations</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
         <?php
         $where = null;
         extract($_POST);
@@ -58,11 +58,11 @@ include '../customer/sidebar.php';
             <div class="col-md-1"></div>
             <div class="col-md-10">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
+                    <div class="row mb-2 align-items-end">
+                        <div class="col">
                             <input type="text" name="reservation_no" value="<?= @$reservation_no ?>" placeholder="Reservation No" style="font-size:13px;" class="form-control">
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col">
                             <?php
                             $db = dbConn();
                             $sql = "SELECT * FROM event";
@@ -81,7 +81,7 @@ include '../customer/sidebar.php';
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col">
                             <?php
                             $db = dbConn();
                             $sql = "SELECT * FROM hall";
@@ -100,7 +100,7 @@ include '../customer/sidebar.php';
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col">
                             <?php
                             $db = dbConn();
                             $sql = "SELECT * FROM reservation_payment_status WHERE payment_status_id = '2' OR payment_status_id = '3' OR payment_status_id = '6'";
@@ -120,31 +120,20 @@ include '../customer/sidebar.php';
                             </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="row">
-                                <div class='col-md-4'>
-                                    <label class="form-label" style="font-size:13px;">Start Date</label>
-                                </div>
-                                <div class='col-md-8'>
-                                    <input type="date" name="start_date" value="<?= @$start_date ?>" placeholder="Start Date" style="font-size:13px;" class="form-control">
-                                </div>
-                            </div>
+                    <div class="row mb-3 align-items-end">
+                        <div class="col">
+                            <label class="form-label" style="font-size:13px;"><b>From</b></label>
+                            <input type="date" name="start_date" value="<?= @$start_date ?>" placeholder="Start Date" style="font-size:13px;" class="form-control">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="row">
-                                <div class='col-md-4'>
-                                    <label class="form-label" style="font-size:13px;">End Date</label>
-                                </div>
-                                <div class='col-md-8'>
-                                    <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;" class="form-control">
-                                </div>
-                            </div>
+                        <div class="col">
+                            <label class="form-label" style="font-size:13px;"><b>To</b></label>
+                            <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;" class="form-control">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-search"></i> Search</button>
-                            <a href="<?= WEB_PATH ?>reservation/confirmed_reservations.php" class="btn btn-info btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-eraser"></i> Clear</a>
+                        <div class="col">
+                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:90px;"><i class="bi bi-search"></i> Search</button>
+                            <a href="<?= $_SERVER['PHP_SELF']?>" class="btn btn-info btn-sm" style="font-size:13px;width:90px;margin-left:10px;"><i class="bi bi-eraser"></i> Clear</a>
                         </div>
+                        <div class="col"></div>
                     </div>
                 </form>
             </div>
@@ -154,7 +143,7 @@ include '../customer/sidebar.php';
             <div class="col-md-1"></div>
             <div class="col-md-10">
                 <div class="table-responsive">
-                    <table class="table table-striped bg-light" style="font-size:13px;">
+                    <table class="table table-striped bg-light" style="font-size:13px;font-family:Arial">
                         <thead style="font-size:13px;text-align:center;vertical-align:middle;" class="bg-secondary text-white">
                             <tr style="vertical-align:middle">
                                 <th>#</th>
@@ -163,7 +152,7 @@ include '../customer/sidebar.php';
                                 <th>Start Time</th>
                                 <th>End Time</th>
                                 <th style="text-align:right">Final Amount(Rs.)</th>
-                                <th style="text-align:left">Payment Status</th>
+                                <th>Payment Status</th>
                                 <th></th>
                                 <th></th>
                             </tr>

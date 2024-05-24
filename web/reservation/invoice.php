@@ -15,7 +15,7 @@ include '../customer/sidebar.php';
     </div><!-- End Page Title -->
     <?php
     extract($_POST);
-    var_dump($_POST);
+    //var_dump($_POST);
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && @$action == 'make_reservation') {
         //echo 'inside';
         $customer_no = $_SESSION['reservation_details']['event_details']['customer_no'];
@@ -226,18 +226,23 @@ include '../customer/sidebar.php';
                                                             <div class="col-md-5 mb-3">
                                                                 <?php
                                                                 $db = dbConn();
-                                                                $sql_taxes = "SELECT * FROM tax ORDER BY amount DESC";
+                                                                $sql_taxes = "SELECT * FROM tax ORDER BY amount ASC";
+                                                                //var_dump($sql_taxes);
                                                                 $result_taxes = $db->query($sql_taxes);
                                                                 $old = 0;
                                                                 $tax=0;
+                                                                $res_amount = str_replace(',','',$total_reservation_amount);
+                                                                //var_dump($res_amount);
                                                                 while ($row_taxes = $result_taxes->fetch_assoc()) {
-                                                                    $new_amount = $row_taxes['tax_rate'];
-                                                                    if ($total_reservation_amount > $old && $total_reservation_amount >= $row_taxes['amount']) {
+                                                                    //print_r('current_amount');
+                                                                    //var_dump($row_taxes['amount']);
+                                                                    if (($res_amount > $old && $res_amount <= $row_taxes['amount']) || $res_amount>$row_taxes['amount']) {
                                                                         $tax = $row_taxes['tax_rate'];
-                                                                        break;
                                                                     }
+                                                                    //print_r('new_old_amount');
+                                                                    $old = $row_taxes['amount'];
+                                                                    //var_dump($old);
                                                                 }
-
 //                                                                $sql = "SELECT tax_rate FROM tax WHERE $total_reservation_amount < ";
 //                                                                //print_r($sql);
 //                                                                $result = $db->query($sql);
