@@ -37,24 +37,6 @@ date_default_timezone_set('Asia/Colombo');
 
         <!-- Template Main CSS File -->
         <link href="<?= WEB_PATH ?>assets/css/main.css" rel="stylesheet">
-        <style>
-            .fixed_header tbody {
-                display:block !important;
-                height:50px;
-                overflow:auto !important;
-            }
-            .fixed_header thead, .fixed_header tbody tr {
-                display:table !important;
-                width:100% !important;
-                table-layout:fixed !important;
-            }
-            .fixed_header thead {
-                width: calc( 100% - 1em ) !important;
-            }
-            table.fixed_header {
-                width:100% !important;
-            }
-        </style>
     </head>
     <body>
         <!-- ======= Header ======= -->

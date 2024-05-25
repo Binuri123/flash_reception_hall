@@ -158,7 +158,7 @@ include '../customer/sidebar.php';
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
-                    <table class="table table-striped bg-light fixed_header" style="font-size:13px;">
+                    <table class="table table-striped bg-light" style="font-size:13px;">
                         <thead style="font-size:13px;text-align:center;vertical-align:middle;font-family:Times New Roman" class="bg-secondary text-white">
                             <tr style="vertical-align:middle">
                                 <th>#</th>
