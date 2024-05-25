@@ -60,7 +60,7 @@ include '../customer/sidebar.php';
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                     <div class="row mb-2 align-items-end">
                         <div class="col">
-                            <input type="text" name="reservation_no" value="<?= @$reservation_no ?>" placeholder="Reservation No" style="font-size:13px;" class="form-control">
+                            <input type="text" name="reservation_no" value="<?= @$reservation_no ?>" placeholder="Reservation No" style="font-size:13px;font-style:italic;" class="form-control">
                         </div>
                         <div class="col">
                             <?php
@@ -68,8 +68,8 @@ include '../customer/sidebar.php';
                             $sql = "SELECT * FROM event";
                             $result = $db->query($sql);
                             ?>
-                            <select name="event" class="form-control form-select" style="font-size:13px;">
-                                <option value="" style="text-align:center">-Event-</option>
+                            <select name="event" class="form-control form-select" style="font-size:13px;font-style:italic;">
+                                <option value="" style="text-align:center">-Event Type-</option>
                                 <?php
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
@@ -87,8 +87,8 @@ include '../customer/sidebar.php';
                             $sql = "SELECT * FROM hall";
                             $result = $db->query($sql);
                             ?>
-                            <select name="hall" class="form-control form-select" style="font-size:13px;">
-                                <option value="" style="text-align:center">-Hall-</option>
+                            <select name="hall" class="form-control form-select" style="font-size:13px;font-style:italic;">
+                                <option value="" style="text-align:center">-Reserved Hall-</option>
                                 <?php
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
@@ -103,16 +103,16 @@ include '../customer/sidebar.php';
                     </div>
                     <div class="row mb-3 align-items-end">
                         <div class="col">
-                            <label class="form-label" style="font-size:13px;"><b>From</b></label>
-                            <input type="date" name="start_date" value="<?= @$start_date ?>" placeholder="Start Date" style="font-size:13px;" class="form-control">
+                            <label class="form-label" style="font-size:13px;font-weight:bold;font-style:italic;">From:</label>
+                            <input type="date" name="start_date" value="<?= @$start_date ?>" placeholder="Start Date" style="font-size:13px;font-style:italic;" class="form-control">
                         </div>
                         <div class="col">
-                            <label class="form-label" style="font-size:13px;"><b>To</b></label>
-                            <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;" class="form-control">
+                            <label class="form-label" style="font-size:13px;font-weight:bold;font-style:italic;">To:</label>
+                            <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;font-style:italic;" class="form-control">
                         </div>
                         <div class="col">
-                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:130px;"><i class="bi bi-search"></i> Search</button>
-                            <a href="<?= $_SERVER['PHP_SELF']?>" class="btn btn-info btn-sm" style="font-size:13px;width:130px;margin-left:10px;"><i class="bi bi-eraser"></i> Clear</a>
+                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:130px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
+                            <a href="<?= $_SERVER['PHP_SELF']?>" class="btn btn-info btn-sm" style="font-size:13px;width:130px;margin-left:10px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
                         </div>
                     </div>
                 </form>
@@ -123,17 +123,17 @@ include '../customer/sidebar.php';
             <div class="col-md-1"></div>
             <div class="col-md-10">
                 <div class="table-responsive">
-                    <table class="table table-striped bg-light">
-                        <thead style="font-size:13px;text-align:center;vertical-align:middle;" class="bg-secondary text-white">
+                    <table class="table table-striped bg-light" style="font-size:13px;">
+                        <thead style="font-size:13px;text-align:center;vertical-align:middle;font-family:Times New Roman" class="bg-secondary text-white">
                             <tr style="vertical-align:middle">
                                 <th>#</th>
-                                <th>Reservation No</th>
-                                <th>Event</th>
-                                <th>Event Date</th>
-                                <th>Reserved Hall</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th style="text-align:right;">Final Amount (Rs.)</th>
+                                <th>Reservation<br>No</th>
+                                <th>Event<br>Type</th>
+                                <th>Event<br>Date</th>
+                                <th>Reserved<br>Hall</th>
+                                <th>Start<br>Time</th>
+                                <th>End<br>Time</th>
+                                <th style="text-align:center;">Final<br>Amount (Rs.)</th>
                                 <th></th>
                                 <th></th>
                             </tr>
@@ -144,7 +144,9 @@ include '../customer/sidebar.php';
                             $sql = "SELECT * FROM reservation r "
                                     . "LEFT JOIN reservation_status rs ON rs.reservation_status_id = r.reservation_status_id "
                                     . "LEFT JOIN event e ON e.event_id=r.event_id LEFT JOIN hall h ON h.hall_id=r.hall_id "
-                                    . "WHERE r.customer_no=(SELECT customer_no FROM customer WHERE customer_id=".$_SESSION['customer_id'].") AND r.reservation_status_id = '1' $where";
+                                    . "WHERE r.customer_no=(SELECT customer_no FROM customer "
+                                    . "WHERE customer_id=".$_SESSION['customer_id'].") "
+                                    . "AND r.reservation_status_id = '1' $where";
                             //print_r($sql);
                             $result = $db->query($sql);
                             if ($result->num_rows > 0) {

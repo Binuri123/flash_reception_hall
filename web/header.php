@@ -37,6 +37,24 @@ date_default_timezone_set('Asia/Colombo');
 
         <!-- Template Main CSS File -->
         <link href="<?= WEB_PATH ?>assets/css/main.css" rel="stylesheet">
+        <style>
+            .fixed_header tbody {
+                display:block !important;
+                height:50px;
+                overflow:auto !important;
+            }
+            .fixed_header thead, .fixed_header tbody tr {
+                display:table !important;
+                width:100% !important;
+                table-layout:fixed !important;
+            }
+            .fixed_header thead {
+                width: calc( 100% - 1em ) !important;
+            }
+            table.fixed_header {
+                width:100% !important;
+            }
+        </style>
     </head>
     <body>
         <!-- ======= Header ======= -->
@@ -71,13 +89,13 @@ date_default_timezone_set('Asia/Colombo');
                     if (strpos($_SERVER['REQUEST_URI'], '/customer/register_customer.php') != FALSE OR strpos($_SERVER['REQUEST_URI'], 'customer/register_success.php') != FALSE) {
                         ?>
 
-                    <a class="btn btn-danger btn-sm" style="width:100px;font-size:14px;" href="<?= WEB_PATH ?>customer/login.php"><strong>Login</strong></a>
-                    <a class="btn btn-dark btn-sm" style="width:150px;font-size:13px;" href="<?= WEB_PATH ?>check_availability/availability_check.php"><strong>Check Availability</strong></a>
+                        <a class="btn btn-danger btn-sm" style="width:100px;font-size:14px;" href="<?= WEB_PATH ?>customer/login.php"><strong>Login</strong></a>
+                        <a class="btn btn-dark btn-sm" style="width:150px;font-size:13px;" href="<?= WEB_PATH ?>check_availability/availability_check.php"><strong>Check Availability</strong></a>
                         <?php
                     } else {
                         ?>
-                    <a class="btn btn-dark btn-sm" style="width:100px;font-size:14px;" href="<?= WEB_PATH ?>customer/register_customer.php">Register</a>
-                    <a class="btn btn-dark btn-sm" style="width:100px;font-size:14px;" href="<?= WEB_PATH ?>customer/login.php">Login</a>
+                        <a class="btn btn-dark btn-sm" style="width:100px;font-size:14px;" href="<?= WEB_PATH ?>customer/register_customer.php">Register</a>
+                        <a class="btn btn-dark btn-sm" style="width:100px;font-size:14px;" href="<?= WEB_PATH ?>customer/login.php">Login</a>
                         <div>
                             <?php
                         }

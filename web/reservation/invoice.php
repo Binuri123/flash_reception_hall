@@ -226,29 +226,14 @@ include '../customer/sidebar.php';
                                                             <div class="col-md-5 mb-3">
                                                                 <?php
                                                                 $db = dbConn();
-                                                                $sql_taxes = "SELECT * FROM tax ORDER BY amount ASC";
-                                                                //var_dump($sql_taxes);
+                                                                $res_amount = str_replace(',', '', $total_reservation_amount);
+                                                                $sql_taxes = "SELECT tax_rate FROM tax WHERE amount<=$res_amount ORDER BY amount DESC LIMIT 1";
                                                                 $result_taxes = $db->query($sql_taxes);
-                                                                $old = 0;
-                                                                $tax=0;
-                                                                $res_amount = str_replace(',','',$total_reservation_amount);
-                                                                //var_dump($res_amount);
-                                                                while ($row_taxes = $result_taxes->fetch_assoc()) {
-                                                                    //print_r('current_amount');
-                                                                    //var_dump($row_taxes['amount']);
-                                                                    if (($res_amount > $old && $res_amount <= $row_taxes['amount']) || $res_amount>$row_taxes['amount']) {
-                                                                        $tax = $row_taxes['tax_rate'];
-                                                                    }
-                                                                    //print_r('new_old_amount');
-                                                                    $old = $row_taxes['amount'];
-                                                                    //var_dump($old);
+                                                                $tax = 0;
+                                                                if ($result_taxes->num_rows > 0) {
+                                                                    $tax_row = $result_taxes->fetch_assoc();
+                                                                    $tax = $tax_row['tax_rate'];
                                                                 }
-//                                                                $sql = "SELECT tax_rate FROM tax WHERE $total_reservation_amount < ";
-//                                                                //print_r($sql);
-//                                                                $result = $db->query($sql);
-//                                                                $row = $result->fetch_assoc();
-//                                                                $tax = $row['tax_rate'];
-                                                                //var_dump($tax);
                                                                 ?>
                                                                 <div><?= number_format($tax, '2') ?></div>
                                                                 <input type="hidden" name="tax" value="<?= @$tax ?>">

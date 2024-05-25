@@ -13,7 +13,7 @@ include '../customer/sidebar.php';
                     <li class="breadcrumb-item active">Rejected Reservations</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
         <?php
         $where = null;
         extract($_POST);
@@ -58,8 +58,8 @@ include '../customer/sidebar.php';
             <div class="col-md-10">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                     <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <input type="text" name="reservation_no" value="<?= @$reservation_no ?>" placeholder="Reservation No" style="font-size:13px;" class="form-control">
+                        <div class="col-md-3 mb-2">
+                            <input type="text" name="reservation_no" value="<?= @$reservation_no ?>" placeholder="Reservation No" style="font-size:13px;font-style:italic;" class="form-control">
                         </div>
                         <div class="col-md-3 mb-3">
                             <?php
@@ -67,8 +67,8 @@ include '../customer/sidebar.php';
                             $sql = "SELECT * FROM event";
                             $result = $db->query($sql);
                             ?>
-                            <select name="event" class="form-control form-select" style="font-size:13px;">
-                                <option value="" style="text-align:center">-Event-</option>
+                            <select name="event" class="form-control form-select" style="font-size:13px;font-style:italic;">
+                                <option value="" style="text-align:center">-Event Type-</option>
                                 <?php
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
@@ -86,8 +86,8 @@ include '../customer/sidebar.php';
                             $sql = "SELECT * FROM hall";
                             $result = $db->query($sql);
                             ?>
-                            <select name="hall" class="form-control form-select" style="font-size:13px;">
-                                <option value="" style="text-align:center">-Hall-</option>
+                            <select name="hall" class="form-control form-select" style="font-size:13px;font-style:italic;">
+                                <option value="" style="text-align:center">-Reserved Hall-</option>
                                 <?php
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
