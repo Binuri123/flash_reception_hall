@@ -36,8 +36,8 @@ include '../customer/sidebar.php';
                 $where .= " r.reservation_status_id = '$reservation_status' AND";
             }
 
-            if (!empty($payment_status)) {
-                $where .= " r.reservation_payment_status_id = '$payment_status' AND";
+            if (!empty($pay_status)) {
+                $where .= " r.reservation_payment_status_id = '$pay_status' AND";
             }
 
             if (!empty($start_date) && !empty($end_date)) {
@@ -55,8 +55,7 @@ include '../customer/sidebar.php';
         }
         ?>
         <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                     <div class="row mb-2 align-items-end">
                         <div class="col">
@@ -100,6 +99,25 @@ include '../customer/sidebar.php';
                                 ?>
                             </select>
                         </div>
+                        <div class="col">
+                            <?php
+                            $db = dbConn();
+                            $sql = "SELECT * FROM payment_status WHERE payment_status_id=7 OR payment_status_id=1 OR payment_status_id=3 ORDER BY payment_status_id DESC";
+                            $result = $db->query($sql);
+                            ?>
+                            <select name="pay_status" class="form-control form-select" style="font-size:13px;font-style:italic;">
+                                <option value="" style="text-align:center">-Payment Status-</option>
+                                <?php
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        ?>
+                                        <option value="<?= $row['payment_status_id'] ?>" <?php if ($row['payment_status_id'] == @$pay_status) { ?> selected <?php } ?>><?= $row['status_name'] ?></option>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                     <div class="row mb-3 align-items-end">
                         <div class="col">
@@ -110,18 +128,16 @@ include '../customer/sidebar.php';
                             <label class="form-label" style="font-size:13px;font-weight:bold;font-style:italic;">To:</label>
                             <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;font-style:italic;" class="form-control">
                         </div>
-                        <div class="col">
-                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:130px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
-                            <a href="<?= $_SERVER['PHP_SELF']?>" class="btn btn-info btn-sm" style="font-size:13px;width:130px;margin-left:10px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
+                        <div class="col d-flex">
+                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
+                            <a href="<?= $_SERVER['PHP_SELF']?>" class="btn btn-info btn-sm flex-grow-1 ms-2" style="font-size:13px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="col-md-1"></div>
         </div>
         <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table table-striped bg-light" style="font-size:13px;">
                         <thead style="font-size:13px;text-align:center;vertical-align:middle;font-family:Times New Roman" class="bg-secondary text-white">
@@ -134,6 +150,7 @@ include '../customer/sidebar.php';
                                 <th>Start<br>Time</th>
                                 <th>End<br>Time</th>
                                 <th style="text-align:center;">Final<br>Amount (Rs.)</th>
+                                <th>Payment<br>Status</th>
                                 <th></th>
                                 <th></th>
                             </tr>
@@ -162,8 +179,34 @@ include '../customer/sidebar.php';
                                         <td style="text-align:center;"><?= $row['start_time'] ?></td>
                                         <td style="text-align:center;"><?= $row['end_time'] ?></td>
                                         <td style="text-align:right;"><?= number_format($row['discounted_price'], '2', '.', ',') ?></td>
+                                        <td style="text-align:center;">
+                                            <?php
+                                                $db = dbConn();
+                                                $sql_pay_status = "SELECT status_name FROM payment_status WHERE payment_status_id=".$row['reservation_payment_status_id'];
+                                                $res_pay_status = $db->query($sql_pay_status);
+                                                $row_pay_status = $res_pay_status->fetch_assoc();
+                                                echo $row_pay_status['status_name'];
+                                            ?>
+                                        </td>
                                         <td>
-                                            <a href="<?= WEB_PATH ?>payment/add.php?reservation_no=<?= $row['reservation_no'] ?>" class="btn btn-info btn-sm" style="text-align:center;vertical-align:middle;margin:0;padding:2px 5px;"><i class="bi bi-cash"></i></a>
+                                            <?php
+                                                if($row['reservation_payment_status_id'] == '1' || $row['reservation_payment_status_id'] == '3'){
+                                                    $sql_pay = "SELECT receipt_no FROM customer_payments WHERE reservation_no='".$row['reservation_no']."'";
+                                                    //var_dump($sql_pay);
+                                                    $result_pay = $db->query($sql_pay);
+                                                    if($result_pay->num_rows>0){
+                                                       if($row_pay = $result_pay->fetch_assoc()){
+                                            ?>
+                                                    <a href="<?= WEB_PATH ?>payment/edit.php?receipt_no=<?= $row_pay['receipt_no'] ?>" class="btn btn-warning btn-sm" style="text-align:center;vertical-align:middle;margin:0;padding:2px 5px;"><i class="bi bi-cash"></i></a>
+                                            <?php
+                                                       } 
+                                                    }
+                                                }else{
+                                            ?>
+                                                    <a href="<?= WEB_PATH ?>payment/add.php?reservation_no=<?= $row['reservation_no'] ?>" class="btn btn-info btn-sm" style="text-align:center;vertical-align:middle;margin:0;padding:2px 5px;"><i class="bi bi-cash"></i></a>
+                                            <?php
+                                                }
+                                            ?>
                                         </td>
                                         <td>
                                             <a href="<?= WEB_PATH ?>reservation/cancel.php?reservation_no=<?= $row['reservation_no'] ?>" class="btn btn-danger btn-sm" style="text-align:center;vertical-align:middle;margin:0;padding:2px 5px;"><i class="bi bi-trash text-dark"></i></a>
@@ -178,7 +221,6 @@ include '../customer/sidebar.php';
                     </table>
                 </div>
             </div>
-            <div class="col-md-1"></div>
         </div>
     </section>
 </main>

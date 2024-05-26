@@ -66,7 +66,7 @@ include '../customer/sidebar.php';
                 . "VALUES('$customer_no', '$event_id', '$event_date', '$function_mode_name', '$start_time', '$end_time', "
                 . "'$guest_count', '$hall', '$package_id', '$per_person_price', '$total_package_price', '$addon_price', "
                 . "'$service_price', '$total_reservation_amount', '$tax', '$taxed_price', '$discount', '$discounted_price', "
-                . "'1', '$remarks', '1', '$cDate','$cTime')";
+                . "'7', '$remarks', '1', '$cDate','$cTime')";
         print_r($sql);
         $db->query($sql);
 

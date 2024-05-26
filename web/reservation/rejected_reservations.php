@@ -57,11 +57,11 @@ include '../customer/sidebar.php';
         <div class="row">
             <div class="col-md-10">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
-                    <div class="row">
-                        <div class="col-md-3 mb-2">
+                    <div class="row align-items-end mb-2">
+                        <div class="col">
                             <input type="text" name="reservation_no" value="<?= @$reservation_no ?>" placeholder="Reservation No" style="font-size:13px;font-style:italic;" class="form-control">
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col">
                             <?php
                             $db = dbConn();
                             $sql = "SELECT * FROM event";
@@ -80,7 +80,7 @@ include '../customer/sidebar.php';
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col">
                             <?php
                             $db = dbConn();
                             $sql = "SELECT * FROM hall";
@@ -99,13 +99,13 @@ include '../customer/sidebar.php';
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col">
                             <?php
                             $db = dbConn();
                             $sql = "SELECT * FROM reservation_payment_status WHERE payment_status_id != '4' AND payment_status_id != '5'";
                             $result = $db->query($sql);
                             ?>
-                            <select name="payment_status" class="form-control form-select" style="font-size:13px;">
+                            <select name="payment_status" class="form-control form-select" style="font-size:13px;font-style:italic;">
                                 <option value="" style="text-align:center">-Payment Status-</option>
                                 <?php
                                 if ($result->num_rows > 0) {
@@ -119,31 +119,20 @@ include '../customer/sidebar.php';
                             </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="row">
-                                <div class='col-md-4'>
-                                    <label class="form-label" style="font-size:13px;">Start Date</label>
-                                </div>
-                                <div class='col-md-8'>
-                                    <input type="date" name="start_date" value="<?= @$start_date ?>" placeholder="Start Date" style="font-size:13px;" class="form-control">
-                                </div>
-                            </div>
+                    <div class="row mb-3 align-items-end">
+                        <div class="col">
+                            <label class="form-label" style="font-size:13px;font-style:italic;font-weight:bold;">From:</label>
+                            <input type="date" name="start_date" value="<?= @$start_date ?>" placeholder="Start Date" style="font-size:13px;font-style:italic;" class="form-control">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="row">
-                                <div class='col-md-4'>
-                                    <label class="form-label" style="font-size:13px;">End Date</label>
-                                </div>
-                                <div class='col-md-8'>
-                                    <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;" class="form-control">
-                                </div>
-                            </div>
+                        <div class="col">
+                            <label class="form-label" style="font-size:13px;font-style:italic;font-weight:bold;">To:</label>
+                            <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;font-style:italic;" class="form-control">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-search"></i> Search</button>
-                            <a href="<?= WEB_PATH ?>reservation/canceled_reservations.php" class="btn btn-info btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-eraser"></i> Clear</a>
+                        <div class="col">
+                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:93px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
+                            <a href="<?= $_SERVER['PHP_SELF'] ?>" class="btn btn-info btn-sm" style="font-size:13px;width:93px;font-style:italic;margin-left:10px;"><i class="bi bi-eraser"></i> Clear</a>
                         </div>
+                        <div class="col"></div>
                     </div>
                 </form>
             </div>
@@ -152,15 +141,15 @@ include '../customer/sidebar.php';
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table table-striped bg-light" style="font-size:13px;text-align:center;">
-                        <thead style="font-size:13px;text-align:center;vertical-align:middle;" class="bg-secondary text-white">
+                        <thead style="font-size:13px;text-align:center;vertical-align:middle;font-family:Times New Roman;" class="bg-secondary text-white">
                             <tr style="vertical-align:middle">
                                 <th>#</th>
-                                <th>Reservation No</th>
-                                <th>Event Date</th>
-                                <th>Event Time</th>
-                                <th>Reservation Status</th>
-                                <th>Final Amount</th>
-                                <th>Paid Amount</th>
+                                <th>Reservation<br>No</th>
+                                <th>Event<br>Date</th>
+                                <th>Event<br>Time</th>
+                                <th>Reservation<br>Status</th>
+                                <th>Final<br>Amount(Rs.)</th>
+                                <th>Paid<br>Amount(Rs.)</th>
                                 <th></th>
                                 <th></th>
                             </tr>

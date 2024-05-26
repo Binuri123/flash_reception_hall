@@ -55,8 +55,7 @@ include '../customer/sidebar.php';
         }
         ?>
         <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                     <div class="row mb-2 align-items-end">
                         <div class="col">
@@ -129,19 +128,17 @@ include '../customer/sidebar.php';
                             <label class="form-label" style="font-size:13px;font-weight:bold;font-style:italic;">To:</label>
                             <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;font-style:italic;" class="form-control">
                         </div>
-                        <div class="col">
-                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:90px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
-                            <a href="<?= $_SERVER['PHP_SELF']?>" class="btn btn-info btn-sm" style="font-size:13px;width:90px;margin-left:10px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
+                        <div class="col d-flex">
+                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
+                            <a href="<?= $_SERVER['PHP_SELF']?>" class="btn btn-info btn-sm flex-grow-1 ms-2" style="font-size:13px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
                         </div>
                         <div class="col"></div>
                     </div>
                 </form>
             </div>
-            <div class="col-md-1"></div>
         </div>
         <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table table-striped bg-light" style="font-size:13px;">
                         <thead style="font-size:13px;text-align:center;vertical-align:middle;font-family:Times New Roman" class="bg-secondary text-white">
@@ -198,7 +195,6 @@ include '../customer/sidebar.php';
                     </table>
                 </div>
             </div>
-            <div class="col-md-1"></div>
         </div>
     </section>
 </main>
