@@ -3,10 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/employee/add.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/header.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/employee/employee.php</file>
+            <file>file:/C:/wamp64/www/flash_reception_hall/web/reservation/pending_reservations.php</file>
+            <file>file:/C:/wamp64/www/flash_reception_hall/web/payment/pending_payments.php</file>
+            <file>file:/C:/wamp64/www/flash_reception_hall/web/reservation/reservation_history.php</file>
+            <file>file:/C:/wamp64/www/flash_reception_hall/web/reservation/invoice.php</file>
             <file>file:/C:/wamp64/www/flash_reception_hall/web/reservation/rejected_reservations.php</file>
+            <file>file:/C:/wamp64/www/flash_reception_hall/web/reservation/refunded_reservations.php</file>
+            <file>file:/C:/wamp64/www/flash_reception_hall/web/reservation/confirmed_reservations.php</file>
         </group>
     </open-files>
 </project-private>
