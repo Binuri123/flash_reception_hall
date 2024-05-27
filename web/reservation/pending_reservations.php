@@ -183,16 +183,20 @@ include '../customer/sidebar.php';
                                         <td style="text-align:center;">
                                             <?php
                                                 $db = dbConn();
-                                                $sql_pay_status = "SELECT status_name FROM payment_status WHERE payment_status_id=".$row['reservation_payment_status_id'];
+                                                $sql_pay_status = "SELECT status_name FROM payment_status WHERE payment_status_id=(SELECT payment_status FROM customer_payments WHERE reservation_no='".$row['reservation_no']."' AND payment_category_id=1)";
                                                 $res_pay_status = $db->query($sql_pay_status);
                                                 $row_pay_status = $res_pay_status->fetch_assoc();
-                                                echo $row_pay_status['status_name'];
+                                                if($res_pay_status->num_rows>0){
+                                                    echo $row_pay_status['status_name'];
+                                                }else{
+                                                    echo "Not Yet Paid";
+                                                } 
                                             ?>
                                         </td>
                                         <td>
                                             <?php
-                                                if($row['reservation_payment_status_id'] == '1' || $row['reservation_payment_status_id'] == '3'){
-                                                    $sql_pay = "SELECT receipt_no FROM customer_payments WHERE reservation_no='".$row['reservation_no']."'";
+                                                if($row_pay_status['status_name']=='Paid' || $row_pay_status['status_name']=='Unsuccessfull'){
+                                                    $sql_pay = "SELECT receipt_no FROM customer_payments WHERE reservation_no='".$row['reservation_no']."' AND payment_category_id=1 AND (payment_status=1 OR payment_status=3)";
                                                     //var_dump($sql_pay);
                                                     $result_pay = $db->query($sql_pay);
                                                     if($result_pay->num_rows>0){
