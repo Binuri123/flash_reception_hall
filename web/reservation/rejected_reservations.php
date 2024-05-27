@@ -55,7 +55,7 @@ include '../customer/sidebar.php';
         }
         ?>
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                     <div class="row align-items-end mb-2">
                         <div class="col">
@@ -128,9 +128,9 @@ include '../customer/sidebar.php';
                             <label class="form-label" style="font-size:13px;font-style:italic;font-weight:bold;">To:</label>
                             <input type="date" name="end_date" value="<?= @$end_date ?>" placeholder="End Date" style="font-size:13px;font-style:italic;" class="form-control">
                         </div>
-                        <div class="col">
-                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:93px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
-                            <a href="<?= $_SERVER['PHP_SELF'] ?>" class="btn btn-info btn-sm" style="font-size:13px;width:93px;font-style:italic;margin-left:10px;"><i class="bi bi-eraser"></i> Clear</a>
+                        <div class="col d-flex">
+                            <button type="submit" name="action" value="search" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
+                            <a href="<?= $_SERVER['PHP_SELF'] ?>" class="btn btn-info btn-sm flex-grow-1 ms-2" style="font-size:13px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
                         </div>
                         <div class="col"></div>
                     </div>
