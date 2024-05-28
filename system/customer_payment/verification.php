@@ -83,7 +83,7 @@ include '../assets/phpmail/mail.php';
                 $sql = "UPDATE reservation SET reservation_payment_status_id = '7',reservation_status_id='4' WHERE reservation_no = '$reservation_no'";
             }
             $db->query($sql);
-            
+
             $sql = "SELECT email,first_name,last_name FROM customer WHERE customer_no=(SELECT customer_no FROM customer_payments WHERE payment_id ='$payment_id')";
             $result = $db->query($sql);
             $row = $result->fetch_assoc();
@@ -276,15 +276,28 @@ include '../assets/phpmail/mail.php';
                                         . "OR (end_time = '" . $row_paid_res['start_time'] . "'))";
                                 $result_conflict = $db->query($sql_conflict);
                                 if ($result_conflict->num_rows > 0) {
-                                    ?>
-                                    <div class="row">
-                                        <div class="col-md-12" style="text-align:left">
-                                            <input type="hidden" name="payment_category" value="<?= $row['payment_category_id'] ?>">
-                                            <input type="hidden" name="payment_id" value="<?= @$payment_id ?>">
-                                            <button type="submit" name="action" value="reject" class="btn btn-success btn-sm" style="width:100px;font-size:13px;">Reject</button>
+                                    $conflict_res = $result_conflict->fetch_assoc();
+                                    if ($conflict_res['reservation_no'] != $row['reservation_no']) {
+                                        ?>
+                                        <div class="row">
+                                            <div class="col-md-12" style="text-align:left">
+                                                <input type="hidden" name="payment_category" value="<?= $row['payment_category_id'] ?>">
+                                                <input type="hidden" name="payment_id" value="<?= @$payment_id ?>">
+                                                <button type="submit" name="action" value="reject" class="btn btn-success btn-sm" style="width:100px;font-size:13px;">Reject</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <?php
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <div class="row">
+                                            <div class="col-md-12" style="text-align:left">
+                                                <input type="hidden" name="payment_category" value="<?= $row['payment_category_id'] ?>">
+                                                <input type="hidden" name="payment_id" value="<?= @$payment_id ?>">
+                                                <button type="submit" name="action" value="verify" class="btn btn-success btn-sm" style="width:100px;font-size:13px;">Submit</button>
+                                            </div>
+                                        </div>
+                                        <?php
+                                    }
                                 } else {
                                     ?>
                                     <div class="row">
@@ -297,6 +310,7 @@ include '../assets/phpmail/mail.php';
                                     <?php
                                 }
                                 ?>
+
                             </form>
                         </div>
                     </div>

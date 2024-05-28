@@ -23,11 +23,11 @@ include '../assets/phpmail/mail.php';
         $message = array();
         if (empty($email)) {
             $message['error_email'] = "The Email Should not be Empty";
-        } elseif (validateEmail($email) == FALSE) {
+        } elseif (validateEmail($email) == TRUE) {
             $message['error_email'] = "Invalid Email";
         } else {
             $db = dbConn();
-            echo $sql = "SELECT * FROM customer WHERE email='$email'";
+            $sql = "SELECT * FROM customer WHERE email='$email'";   
             $result = $db->query($sql);
             if ($result->num_rows <= 0) {
                 $message['error_email'] = "This email is not registered";
@@ -36,10 +36,10 @@ include '../assets/phpmail/mail.php';
 
         if (empty($message)) {
             $db = dbConn();
-            echo $sql = "SELECT reg_no,first_name,last_name FROM customer WHERE email = '$email'";
+            echo $sql = "SELECT customer_no,first_name,last_name FROM customer WHERE email = '$email'";
             $result = $db->query($sql);
             $row = $result->fetch_assoc();
-            $reg_no = $row['reg_no'];
+            $reg_no = $row['customer_no'];
             $recepient_name = $row['first_name'] . " " . $row['last_name'];
             $subject = 'Password Reset Request';
             $body = "<p>A new password was requested for Flash Recepton Hall customer account.</p>";

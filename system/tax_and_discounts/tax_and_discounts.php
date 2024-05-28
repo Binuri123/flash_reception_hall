@@ -24,7 +24,7 @@ include '../menu.php';
                         <div class="card-body text-center">
                             <?php
                             $db = dbConn();
-                            $sql = "SELECT tax_rate FROM tax where availability='Available'";
+                            $sql = "SELECT MAX(tax_rate) AS tax_rate FROM tax";
                             $result = $db->query($sql);
                             $row = $result->fetch_assoc();
                             $current_tax_rate = $row['tax_rate'];

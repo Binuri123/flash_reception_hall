@@ -79,7 +79,11 @@
                 <div class="card bg-danger text-white">
                     <div class="card-body text-center">
                         <?php
-                        $profit = ($total_income - $total_expense) * 100 / $total_income;
+                        if($total_income == 0){
+                            $profit = 0;
+                        }else{
+                            $profit = ($total_income - $total_expense) * 100 / $total_income;
+                        }
                         ?>
                         <h6># Profit<br>(<?= $year ?>)<br><?= $profit . "%" ?></h6>
                     </div>
