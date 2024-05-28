@@ -96,9 +96,9 @@ include '../assets/phpmail/mail.php';
             $body = "<p>Dear " . $first_name . "</p>";
             $body .= "<br><br>";
             $body .= "<p>Unfortunately the time slot you selected was secured by another customer before you make the payment. "
-                    . "According to our policy we have to reject your reservation. "
-                    . "We are truly apologize for the inconvenience caused by this rejection. "
-                    . "You are eligible for a full refund on your payment. You can claim it by visiting your user account.</p>";
+                . "According to our policy we have to reject your reservation. "
+                . "We are truly apologize for the inconvenience caused by this rejection. "
+                . "You are eligible for a full refund on your payment. You can claim it by visiting your user account.</p>";
             $body .= "<br><br>";
             $body .= "You can check if the other hall is available for your reservation or make another reservation for another date if it is convenient.";
             $body .= "<br><br>";
@@ -182,7 +182,7 @@ include '../assets/phpmail/mail.php';
                                         </tr>
                                         <?php
                                         if ($row['payment_method_id'] != '1') {
-                                            ?>
+                                        ?>
                                             <tr>
                                                 <td>Paid Bank</td>
                                                 <?php
@@ -192,39 +192,39 @@ include '../assets/phpmail/mail.php';
                                                 ?>
                                                 <td><?= $row_bank_name['bank_name'] ?></td>
                                             </tr>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                         <?php
                                         if ($row['payment_method_id'] == '2') {
                                             $sql_branch = "SELECT cb.bank_branch FROM customer_payments p "
-                                                    . "LEFT JOIN customer_payment_bank cb ON p.payment_id=cb.payment_id WHERE p.payment_id='$payment_id'";
+                                                . "LEFT JOIN customer_payment_bank cb ON p.payment_id=cb.payment_id WHERE p.payment_id='$payment_id'";
                                             $result_branch = $db->query($sql_branch);
                                             $row_branch = $result_branch->fetch_assoc();
-                                            ?>
+                                        ?>
 
                                             <tr>
                                                 <td>Bank Branch</td>
                                                 <td><?= $row_branch['bank_branch'] ?></td>
                                             </tr>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                         <?php
                                         if ($row['payment_method_id'] == '3') {
-                                            ?>
+                                        ?>
                                             <tr>
                                                 <td>Paid Bank</td>
                                                 <?php
                                                 $sql_ref_no = "SELECT co.reference_no FROM customer_payments p "
-                                                        . "LEFT JOIN customer_payment_online co ON co.payment_id=p.payment_id WHERE p.payment_id='$payment_id'";
+                                                    . "LEFT JOIN customer_payment_online co ON co.payment_id=p.payment_id WHERE p.payment_id='$payment_id'";
                                                 //print_r($sql_bank_name);
                                                 $result_ref_no = $db->query($sql_ref_no);
                                                 $row_ref_no = $result_ref_no->fetch_assoc();
                                                 ?>
                                                 <td><?= $row_ref_no['reference_no'] ?></td>
                                             </tr>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                     </tbody>
@@ -233,11 +233,11 @@ include '../assets/phpmail/mail.php';
                         </div>
                         <?php
                         if ($row['payment_method_id'] != '1') {
-                            ?>
+                        ?>
                             <div class="col-md-6">
                                 <a href="../../web/assets/img/pay_slip/customer/<?= $row['pay_slip'] ?>"><img src="../../web/assets/img/pay_slip/customer/<?= $row['pay_slip'] ?>" style="width:350px;height:350px;"></a>
                             </div>
-                            <?php
+                        <?php
                         }
                         ?>
                     </div>
@@ -263,43 +263,31 @@ include '../assets/phpmail/mail.php';
                                 <?php
                                 $db = dbConn();
                                 $sql_paid_res = "SELECT * FROM reservation WHERE reservation_no="
-                                        . "(SELECT reservation_no FROM customer_payments WHERE payment_id = '$payment_id')";
+                                    . "(SELECT reservation_no FROM customer_payments WHERE payment_id = '$payment_id')";
                                 $result_paid_res = $db->query($sql_paid_res);
                                 $row_paid_res = $result_paid_res->fetch_assoc();
 
                                 $sql_conflict = "SELECT reservation_no FROM reservation WHERE event_date='" . $row_paid_res['event_date'] . "' "
-                                        . "AND  reservation_status_id = '2' AND hall_id = '" . $row_paid_res['hall_id'] . "' "
-                                        . "AND ((start_time BETWEEN '" . $row_paid_res['start_time'] . "' AND '" . $row_paid_res['end_time'] . "') "
-                                        . "OR (end_time BETWEEN '" . $row_paid_res['start_time'] . "' AND '" . $row_paid_res['end_time'] . "') "
-                                        . "OR (start_time <= '" . $row_paid_res['start_time'] . "' AND end_time >= '" . $row_paid_res['end_time'] . "') "
-                                        . "OR (start_time = '" . $row_paid_res['end_time'] . "') "
-                                        . "OR (end_time = '" . $row_paid_res['start_time'] . "'))";
+                                    . "AND  reservation_status_id = '2' AND hall_id = '" . $row_paid_res['hall_id'] . "' "
+                                    . "AND ((start_time BETWEEN '" . $row_paid_res['start_time'] . "' AND '" . $row_paid_res['end_time'] . "') "
+                                    . "OR (end_time BETWEEN '" . $row_paid_res['start_time'] . "' AND '" . $row_paid_res['end_time'] . "') "
+                                    . "OR (start_time <= '" . $row_paid_res['start_time'] . "' AND end_time >= '" . $row_paid_res['end_time'] . "') "
+                                    . "OR (start_time = '" . $row_paid_res['end_time'] . "') "
+                                    . "OR (end_time = '" . $row_paid_res['start_time'] . "')) "
+                                    . "AND reservation_no!='" . $row['reservation_no'] . "'";
                                 $result_conflict = $db->query($sql_conflict);
                                 if ($result_conflict->num_rows > 0) {
-                                    $conflict_res = $result_conflict->fetch_assoc();
-                                    if ($conflict_res['reservation_no'] != $row['reservation_no']) {
-                                        ?>
-                                        <div class="row">
-                                            <div class="col-md-12" style="text-align:left">
-                                                <input type="hidden" name="payment_category" value="<?= $row['payment_category_id'] ?>">
-                                                <input type="hidden" name="payment_id" value="<?= @$payment_id ?>">
-                                                <button type="submit" name="action" value="reject" class="btn btn-success btn-sm" style="width:100px;font-size:13px;">Reject</button>
-                                            </div>
+                                ?>
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align:left">
+                                            <input type="hidden" name="payment_category" value="<?= $row['payment_category_id'] ?>">
+                                            <input type="hidden" name="payment_id" value="<?= @$payment_id ?>">
+                                            <button type="submit" name="action" value="reject" class="btn btn-success btn-sm" style="width:100px;font-size:13px;">Reject</button>
                                         </div>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <div class="row">
-                                            <div class="col-md-12" style="text-align:left">
-                                                <input type="hidden" name="payment_category" value="<?= $row['payment_category_id'] ?>">
-                                                <input type="hidden" name="payment_id" value="<?= @$payment_id ?>">
-                                                <button type="submit" name="action" value="verify" class="btn btn-success btn-sm" style="width:100px;font-size:13px;">Submit</button>
-                                            </div>
-                                        </div>
-                                        <?php
-                                    }
+                                    </div>
+                                <?php
                                 } else {
-                                    ?>
+                                ?>
                                     <div class="row">
                                         <div class="col-md-12" style="text-align:left">
                                             <input type="hidden" name="payment_category" value="<?= $row['payment_category_id'] ?>">
@@ -307,7 +295,7 @@ include '../assets/phpmail/mail.php';
                                             <button type="submit" name="action" value="verify" class="btn btn-success btn-sm" style="width:100px;font-size:13px;">Submit</button>
                                         </div>
                                     </div>
-                                    <?php
+                                <?php
                                 }
                                 ?>
 
