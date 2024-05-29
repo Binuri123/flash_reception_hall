@@ -1,16 +1,5 @@
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-            </ol>
-        </nav>
-    </div>
-    <div class="row">
-        <div class="col-md-10">
-            <h3 class="h3">Dashboard</h3>
-        </div>
-    </div>
+    <?php require_once __DIR__ . '/dashboard_banner.php'; ?>
     <div class="row mb-3">
         <div class="col-md-2">
             <div class="card bg-info text-white">
@@ -59,7 +48,7 @@
         </div>
         <?php
         if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '2' || $_SESSION['user_role_id'] == '3' || $_SESSION['user_role_id'] == '4' || $_SESSION['user_role_id'] == '6') {
-            ?>
+        ?>
             <div class="col-md-2">
                 <div class="card bg-primary text-white">
                     <div class="card-body text-center">
@@ -79,9 +68,9 @@
                 <div class="card bg-danger text-white">
                     <div class="card-body text-center">
                         <?php
-                        if($total_income == 0){
+                        if ($total_income == 0) {
                             $profit = 0;
-                        }else{
+                        } else {
                             $profit = ($total_income - $total_expense) * 100 / $total_income;
                         }
                         ?>
@@ -89,7 +78,7 @@
                     </div>
                 </div>
             </div>
-            <?php
+        <?php
         }
         ?>
         <div class="col-md-2"></div>
