@@ -94,7 +94,6 @@ include '../assets/phpmail/mail.php';
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-
                             <li>
                                 <a class="dropdown-item d-flex align-items-center" href="<?= WEB_PATH ?>customer/edit_profile.php">
                                     <i class="bi bi-gear"></i>
@@ -105,9 +104,14 @@ include '../assets/phpmail/mail.php';
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
+                                <a class="dropdown-item d-flex align-items-center" href="<?= WEB_PATH ?>customer/change_password.php">
+                                    <i class="bi bi-lock"></i>
+                                    <span>Change Password</span>
+                                </a>
+                            </li>
+                            <li>
                                 <hr class="dropdown-divider">
                             </li>
-
                             <li>
                                 <a class="dropdown-item d-flex align-items-center" href="<?= WEB_PATH ?>customer/logout.php">
                                     <i class="bi bi-box-arrow-right"></i>

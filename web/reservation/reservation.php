@@ -145,4 +145,6 @@ include '../customer/sidebar.php';
         </div>
     </section>
 </main>
-<?php include('../customer/footer.php') ?>
+<?php 
+    include('../customer/footer.php') 
+?>

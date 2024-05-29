@@ -12,7 +12,7 @@ include 'sidebar.php';
                     <li class="breadcrumb-item active">Update Profile</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
         <?php
         $db = dbConn();
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {

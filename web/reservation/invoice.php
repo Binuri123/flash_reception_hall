@@ -12,7 +12,7 @@ include '../customer/sidebar.php';
                 <li class="breadcrumb-item active">Reservation</li>
             </ol>
         </nav>
-    </div><!-- End Page Title -->
+    </div>
     <?php
     extract($_POST);
     //var_dump($_POST);
@@ -97,6 +97,39 @@ include '../customer/sidebar.php';
                 $db->query($sql);
             }
         }
+        
+        $sql_cust = "SELECT t.title_name,c.first_name,c.last_name,c.email FROM customer c "
+                        . "LEFT JOIN customer_titles t ON c.title_id=t.title_id "
+                        . "WHERE c.customer_no='".$customer_no."'";
+        $result_cust = $db->query($sql_cust);
+        $row_cust = $result_cust->fetch_assoc();
+        $to = $row_cust['email'];
+        $recepient_name = $row_cust['title_name'].". ".$row_cust['first_name']." ".$row_cust['last_name'];
+        $subject = 'Flash Reception Hall - Reservation Placement';
+        $body = "<p>Thank you for choosing Flash Reception Hall for your special day. You have placed a Reservation as follows.</p>";
+        $body .= "<br>";
+        $sql_event = "SELECT event_name FROM event WHERE event_id=$event_id";
+        print_r($sql_event);
+        $res_event = $db->query($sql_event);
+        $row_event = $res_event->fetch_assoc();
+        $body .= "<p>Event : ".$row_event['event_name']."</p>";
+        $body .= "<p>Date of the Event : ".$event_date."</p>";
+        $body .= "<p>From:".$start_time." To:".$end_time."</p>";
+        $sql_hall = "SELECT hall_name FROM hall WHERE hall_id=$hall";
+        $res_hall = $db->query($sql_hall);
+        $row_hall = $res_hall->fetch_assoc();
+        $body .= "<p>Reserved Hall : ".$row_hall['hall_name']."</p>";
+        $body .= "<br>";
+        $body .= "Please make sure to pay the security fee for the confirmation of your reservation within next 14days.";
+        $body .= "If you have any questions or require further details, feel free to reach out to us. We are here to assist you in any way we can to ensure the success of the event.";
+        $body .= "<br><br>";
+        $body .= "<p>Thank You,</p><br>";
+        $body .= "<p>Best Regards,</p><br>";
+        $body .= "<p>Flash Reception Hall.</p>";
+        $alt_body = "<p>Reservation Placement</p>";
+            
+        send_email($to, $recepient_name, $subject, $body, $alt_body);
+        
         unset($_SESSION['reservation_details']);
         unset($_SESSION['additional_items']);
         unset($_SESSION['services']);

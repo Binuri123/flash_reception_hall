@@ -73,6 +73,12 @@
         </li>
         <!-- End Profile Page Nav -->
         <!-- Start Change Password Nav -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="<?= WEB_PATH ?>customer/change_password.php">
+                <i class="bi bi-lock"></i>
+                <span>Change Password</span>
+            </a>
+        </li>
         <!-- End Change Password Nav -->
         <!-- Start Logout Page Nav -->
         <li class="nav-item">
