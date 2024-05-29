@@ -2,7 +2,7 @@
     <?php require_once __DIR__.'/dashboard_banner.php'; ?>
     <div class="row mb-3">
         <div class="col-md-2">
-            <div class="card bg-info text-white">
+            <div class="card bg-info text-info"  style="--bs-bg-opacity: .05;">
                 <div class="card-body text-center">
                     <?php
                     $db = dbConn();
@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="col-md-2">
-            <div class="card bg-warning text-white">
+            <div class="card bg-warning text-warning" style="--bs-bg-opacity: .05;">
                 <div class="card-body text-center">
                     <?php
                     $db = dbConn();
@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="col-md-2">
-            <div class="card bg-success text-white">
+            <div class="card bg-success text-success" style="--bs-bg-opacity: .05;" >
                 <div class="card-body text-center">
                     <?php
                     $db = dbConn();
@@ -50,7 +50,7 @@
         if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '2' || $_SESSION['user_role_id'] == '3' || $_SESSION['user_role_id'] == '4' || $_SESSION['user_role_id'] == '6') {
             ?>
             <div class="col-md-2">
-                <div class="card bg-primary text-white">
+                <div class="card bg-primary text-primary" style="--bs-bg-opacity: .1;">
                     <div class="card-body text-center">
                         <?php
                         $db = dbConn();
@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="card bg-danger text-white">
+                <div class="card bg-danger text-danger"  style="--bs-bg-opacity: .1;">
                     <div class="card-body text-center">
                         <?php
                         if($total_income == 0){
