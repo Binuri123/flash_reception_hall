@@ -5,8 +5,9 @@
             $profit = 0;
         } else {
             $profit = ($total_income - $total_expense) * 100 / $total_income;
+            $profit = number_format($profit,2);
         }
         ?>
-        <h6># Profit<br>(<?= $year ?>)<br><?= $profit . "%" ?></h6>
+        <h6>Profit<br>(<?= $year ?>)<br><?= $profit . "%" ?></h6>
     </div>
 </div>

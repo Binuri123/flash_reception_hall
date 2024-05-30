@@ -5,17 +5,17 @@
     <div class="row mb-3">
         <div class="col">
             <?php
-                require_once '/components/total_annual_customers';
+                require_once __DIR__.'/components/total_annual_customers.php';
             ?>
         </div>
         <div class="col">
             <?php
-                require_once '/components/total_annual_reservations';
+                require_once __DIR__.'/components/total_annual_reservations.php';
             ?>
         </div>
         <div class="col">
             <?php
-                require_once '/components/annual_income';
+                require_once __DIR__.'/components/annual_income.php';
             ?>
         </div>
         <?php
@@ -23,12 +23,12 @@
             ?>
             <div class="col">
                 <?php
-                    require_once '/components/annual_expenses';
+                    require_once __DIR__.'/components/annual_expenses.php';
                 ?>
             </div>
             <div class="col">
                 <?php
-                    require_once '/components/annual_profit';
+                    require_once __DIR__.'/components/annual_profit.php';
                 ?>
             </div>
             <?php

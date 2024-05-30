@@ -8,6 +8,6 @@
         $row_expense = $result_expense->fetch_assoc();
         $total_expense = $row_expense['total_expense'];
         ?>
-        <h6># Expenses (LKR)<br>(<?= $year ?>)<br><?= number_format($total_expense, '2', '.', ',') ?></h6>
+        <h6>Expenses (LKR)<br>(<?= $year ?>)<br><?= number_format($total_expense, '2', '.', ',') ?></h6>
     </div>
 </div>
