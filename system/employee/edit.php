@@ -5,7 +5,7 @@ include '../menu.php';
 ?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -16,7 +16,7 @@ include '../menu.php';
         </nav>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
-                <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/employee.php"><i class="bi bi-calendar"></i> Search Employee</a>
+                <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/employee.php" style="font-size:13px;"><i class="bi bi-calendar"></i> Search Employee</a>
             </div>
         </div>
     </div>
@@ -222,19 +222,24 @@ include '../menu.php';
             //echo 'Connected..!';
             $userid = $_SESSION['userid'];
             $cDate = date('Y-m-d');
-            
-            $sql = "SELECT first_name,middle_name,calling_name,house_no,street,city,district_id as district,contact_number,alternate_number,email,dob,nic,gender,designation_id as designation,recruitment_date,employement_status_id as employement_status,user_role_id as user_role,user_status FROM employee e LEFT JOIN users u ON u.user_id=e.user_id WHERE employee_id='$employee_id'";
+
+            $sql = "SELECT first_name,middle_name,calling_name,house_no,street,city,district_id as district,"
+                    . "contact_number,alternate_number,email,dob,nic,gender,designation_id as designation,"
+                    . "recruitment_date,employement_status_id as employement_status,user_role_id as user_role,"
+                    . "user_status FROM employee e LEFT JOIN users u ON u.user_id=e.user_id "
+                    . "WHERE employee_id='$employee_id'";
             print_r($sql);
             $result = $db->query($sql);
             $row = $result->fetch_assoc();
-            
+
             $updated_fields = getUpdatedFields($row, $_POST);
             $updated_fields_string = implode(',', $updated_fields);
-            
+
             $old_email = $row['email'];
-            
-            if($old_email != $email){
-                $sql = "UPDATE users SET username='$email' WHERE user_id = (SELECT user_id FROM employee WHERE employee_id='$employee_id')";
+
+            if ($old_email != $email) {
+                $sql = "UPDATE users SET username='$email' WHERE user_id = "
+                        . "(SELECT user_id FROM employee WHERE employee_id='$employee_id')";
                 $db->query($sql);
             }
 
@@ -246,14 +251,13 @@ include '../menu.php';
             $sql = "UPDATE employee SET title = '$title',emp_image = '$emp_image_name',first_name = '$first_name',middle_name = '$middle_name',last_name = '$last_name',calling_name = '$calling_name',house_no = '$house_no',street = '$street',city = '$city',district_id = '$district',contact_number = '$contact_number',alternate_number = '$alternate_number',email = '$email',dob = '$dob',nic = '$nic',gender = '$gender',designation_id = '$designation',recruitment_date = '$recruitment_date',employement_status_id = '$employment_status',update_user = '$userid',update_date = '$cDate' WHERE employee_id='$employee_id'";
             //print_r($sql);
             $db->query($sql);
-            
+
             header('Location:edit_success.php?employee_id=' . $employee_id . '&values=' . urlencode($updated_fields_string));
         }
     }
     ?>
     <div class="row">
-        <div class="mb-3 col-md-1"></div>
-        <div class="mb-3 col-md-10">
+        <div class="mb-3 col-md-12">
             <div class="card bg-light">
                 <div class="card-header">
                     <div class="row">
@@ -267,15 +271,15 @@ include '../menu.php';
                 </div>
                 <div class="card-body" style="font-size:13px;">
                     <form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="mb-2 col-md-6">
+                        <div class="row mb-2">
+                            <div class="col">
                                 <label for="emp_image" class="form-label"><span class="text-danger">*</span>Photo</label><br>
                                 <input class="form-control" type="file" name="emp_image" id="emp_image" style="font-size:13px;">
                                 <?php
                                 if (empty($_FILES['emp_image'])) {
                                     if (!empty($emp_image)) {
                                         $prev_image = $emp_image;
-                                    }else{
+                                    } else {
                                         $prev_image = 'noImage.png';
                                     }
                                 }
@@ -283,62 +287,64 @@ include '../menu.php';
                                 <input type="hidden" name="prev_image" value="<?= @$prev_image ?>">
                                 <div class="text-danger"><?= @$message["error_emp_image"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-6">
+                            <div class="col">
                                 <label class="form-label"><span class="text-danger">*</span>Title</label><br>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="title" id="mr" value="Mr" <?php if (isset($title) && $title == 'Mr') { ?> checked <?php } ?> style="font-size:13px;">
-                                    <label class="form-check-label" for="mr">Mr.</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="title" id="mrs" value="Mrs" <?php if (isset($title) && $title == 'Mrs') { ?> checked <?php } ?> style="font-size:13px;">
-                                    <label class="form-check-label" for="mrs">Mrs.</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="title" id="miss" value="Miss" <?php if (isset($title) && $title == 'Miss') { ?> checked <?php } ?> style="font-size:13px;">
-                                    <label class="form-check-label" for="miss">Miss.</label>
+                                <div class="d-flex">
+                                    <div class="form-check form-check-inline flex-grow-1">
+                                        <input class="form-check-input" type="radio" name="title" id="mr" value="Mr" <?php if (isset($title) && $title == 'Mr') { ?> checked <?php } ?> style="font-size:13px;">
+                                        <label class="form-check-label" for="mr">Mr.</label>
+                                    </div>
+                                    <div class="form-check form-check-inline flex-grow-1">
+                                        <input class="form-check-input" type="radio" name="title" id="mrs" value="Mrs" <?php if (isset($title) && $title == 'Mrs') { ?> checked <?php } ?> style="font-size:13px;">
+                                        <label class="form-check-label" for="mrs">Mrs.</label>
+                                    </div>
+                                    <div class="form-check form-check-inline flex-grow-1">
+                                        <input class="form-check-input" type="radio" name="title" id="miss" value="Miss" <?php if (isset($title) && $title == 'Miss') { ?> checked <?php } ?> style="font-size:13px;">
+                                        <label class="form-check-label" for="miss">Miss.</label>
+                                    </div>
                                 </div>
                                 <div class="text-danger"><?= @$message["error_title"] ?></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="mb-2 col-md-3">
+                        <div class="row mb-2">
+                            <div class="col">
                                 <label for="first_name" class="form-label"><span class="text-danger">*</span>First Name</label>
                                 <input type="text" class="form-control" id="first_name" name="first_name" value="<?= @$first_name ?>" style="font-size:13px;" placeholder="Ex: Kamal">
                                 <div class="text-danger"><?= @$message["error_first_name"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="middle_name" class="form-label">Middle Name [Optional]</label>
                                 <input type="text" class="form-control" id="middle_name" name="middle_name" value="<?= @$middle_name ?>" style="font-size:13px;" placeholder="Ex: Ananda">
                                 <div class="text-danger"><?= @$message["error_middle_name"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="last_name" class="form-label"><span class="text-danger">*</span>Last Name</label>
                                 <input type="text" class="form-control" id="last_name" name="last_name" value="<?= @$last_name ?>" style="font-size:13px;" placeholder="Ex: Perera">
                                 <div class="text-danger"><?= @$message["error_last_name"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="calling_name" class="form-label"><span class="text-danger">*</span>Calling Name</label>
                                 <input type="text" class="form-control" id="calling_name" name="calling_name" value="<?= @$calling_name ?>" style="font-size:13px;" placeholder="Ex: Kamal">
                                 <div class="text-danger"><?= @$message["error_calling_name"] ?></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="mb-2 col-md-3">
+                        <div class="row mb-2">
+                            <div class="col">
                                 <label for="house_no" class="form-label"><span class="text-danger">*</span>House No/Name</label>
                                 <input type="text" class="form-control" id="house_no" name="house_no" value="<?= @$house_no ?>" style="font-size:13px;" placeholder="Ex: No.123">
                                 <div class="text-danger"><?= @$message["error_house_no"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="street" class="form-label"><span class="text-danger">*</span>Street Name</label>
                                 <input type="text" class="form-control" id="street" name="street" value="<?= @$street ?>" style="font-size:13px;" placeholder="Ex: First Avenue">
                                 <div class="text-danger"><?= @$message["error_street"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="city" class="form-label"><span class="text-danger">*</span>City</label>
                                 <input type="text" class="form-control" id="city" name="city" value="<?= @$city ?>" style="font-size:13px;" placeholder="Ex: Dematagoda">
                                 <div class="text-danger"><?= @$message["error_city"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="district" class="form-label"><span class="text-danger">*</span>District</label>
                                 <select class="form-control form-select" id="district" name="district" style="font-size:13px;">
                                     <option value="" style="text-align:center;">-Select a District-</option>
@@ -356,30 +362,30 @@ include '../menu.php';
                                 <div class="text-danger"><?= @$message["error_district"] ?></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="mb-2 col-md-3">
+                        <div class="row mb-2">
+                            <div class="col">
                                 <label for="contact_number" class="form-label"><span class="text-danger">*</span>Contact Number</label>
                                 <input type="text" class="form-control" id="contact_number" name="contact_number" value="<?= @$contact_number ?>" style="font-size:13px;" placeholder="Ex: 0123456789">
                                 <div class="text-danger"><?= @$message["error_contact_number"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="alternate_number" class="form-label">Alternate Number[Optional]</label>
                                 <input type="text" class="form-control" id="alternate_number" name="alternate_number" value="<?= @$alternate_number ?>" style="font-size:13px;" placeholder="Ex: 0123456789">
                                 <div class="text-danger"><?= @$message["error_alternate_number"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="email" class="form-label"><span class="text-danger">*</span>Email</label>
                                 <input type="text" class="form-control" id="email" name="email" value="<?= @$email ?>" style="font-size:13px;" placeholder="Ex: kamal@gmail.com">
                                 <div class="text-danger"><?= @$message["error_email"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="nic" class="form-label"><span class="text-danger">*</span>NIC</label>
                                 <input type="text" class="form-control" id="nic" name="nic" value="<?= @$nic ?>" style="font-size:13px;" placeholder="Ex: 981234567V">
                                 <div class="text-danger"><?= @$message["error_nic"] ?></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="mb-2 col-md-3">
+                        <div class="row mb-2">
+                            <div class="col">
                                 <label for="dob" class="form-label"><span class="text-danger">*</span>Date of Birth</label>
                                 <?php
                                 $today = date('Y-m-d');
@@ -389,7 +395,7 @@ include '../menu.php';
                                 <input type="date" class="form-control" id="dob" name="dob" value="<?= @$dob ?>" min="<?= $mindate ?>" max="<?= $maxdate ?>" style="font-size:13px;">
                                 <div class="text-danger"><?= @$message["error_dob"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label class="form-label"><span class="text-danger">*</span>Gender</label><br>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="gender" id="male" value="Male" <?php if (isset($gender) && @$gender == 'Male') { ?> checked <?php } ?> style="font-size:13px;">
@@ -401,7 +407,7 @@ include '../menu.php';
                                 </div>
                                 <div class="text-danger"><?= @$message["error_gender"] ?></div>
                             </div>  
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="employment_status" class="form-label"><span class="text-danger">*</span>Employment Status</label>                            
                                 <select class="form-control form-select" id="employment_status" name="employment_status" style="font-size:13px;">
                                     <option value="" style="text-align:center;">-Select a Status-</option>
@@ -418,14 +424,14 @@ include '../menu.php';
                                 </select>
                                 <div class="text-danger"><?= @$message["error_employment_status"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="recruitment_date" class="form-label"><span class="text-danger">*</span>Recruitment Date</label>
                                 <input type="date" class="form-control" id="recruitment_date" name="recruitment_date" value="<?= @$recruitment_date ?>" min="2022-01-01" max="<?php echo date('Y-m-d') ?>" style="font-size:13px;">
                                 <div class="text-danger"><?= @$message["error_recruitment_date"] ?></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="mb-2 col-md-3">
+                        <div class="row mb-2">
+                            <div class="col">
                                 <label for="designation" class="form-label"><span class="text-danger">*</span>Designation</label>                            
                                 <select class="form-control form-select" id="designation" name="designation" style="font-size:13px;">
                                     <option value="" style="text-align:center;">-Select a Designation-</option>
@@ -442,7 +448,7 @@ include '../menu.php';
                                 </select>
                                 <div class="text-danger"><?= @$message["error_designation"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label for="user_role" class="form-label"><span class="text-danger">*</span>User Role</label>
                                 <select class="form-control form-select" id="user_role" name="user_role" style="font-size:13px;">
                                     <option value="" style="text-align:center;">-Select a Role-</option>
@@ -459,7 +465,7 @@ include '../menu.php';
                                 </select>
                                 <div class="text-danger"><?= @$message["error_user_role"] ?></div>
                             </div>
-                            <div class="mb-2 col-md-3">
+                            <div class="col">
                                 <label class="form-label"><span class="text-danger">*</span>User Status</label><br>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="user_status" id="active_status" value="Active" <?php if (isset($user_status) && @$user_status == 'Active') { ?> checked <?php } ?> style="font-size:13px;">
@@ -471,8 +477,9 @@ include '../menu.php';
                                 </div>
                                 <div class="text-danger"><?= @$message["error_user_status"] ?></div>
                             </div>
+                            <div class="col"></div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="mb-2" style="text-align:right">
                                 <input type="hidden" name="employee_id" value="<?= @$employee_id ?>">
                                 <button type="submit" name="action" value="save_changes" class="btn btn-success btn-sm" style="font-size:13px;width:150px;">Save Changes</button>
@@ -483,7 +490,6 @@ include '../menu.php';
                 </div>
             </div>
         </div>
-        <div class="mb-3 col-md-1"></div>
     </div>
 </main>
 <?php

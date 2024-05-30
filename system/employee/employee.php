@@ -3,7 +3,8 @@ include '../header.php';
 include '../menu.php';
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between flex-md-nowrap align-items-center mt-4">
+        <h1 class="h4">Employee</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -11,17 +12,11 @@ include '../menu.php';
                 <li class="breadcrumb-item active" aria-current="page">Employee</li>
             </ol>
         </nav>
-        <?php
-        if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '6') {
-            ?>
-            <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group me-2">
-                    <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/add.php"><i class="bi bi-plus-circle"></i> New Employee</a>
-                </div>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/add.php"><i class="bi bi-plus-circle"></i> New Employee</a>
             </div>
-            <?php
-        }
-        ?>
+        </div>
     </div>
     <?php
     extract($_POST);
@@ -73,40 +68,35 @@ include '../menu.php';
     ?>
     <div class="row">
         <div class="col-md-12">
-            <h3>Employee List</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
             <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
-                <div class="row">
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Employee No" name="employee_no" value="<?= @$employee_no ?>" style="font-size:13px;">
+                <div class="row mb-3 align-items-end">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Employee No" name="employee_no" value="<?= @$employee_no ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="First Name" name="first_name" value="<?= @$first_name ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First Name" name="first_name" value="<?= @$first_name ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Last Name" name="last_name" value="<?= @$last_name ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Last Name" name="last_name" value="<?= @$last_name ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Contact Number" name="contact_number" value="<?= @$contact_number ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Contact Number" name="contact_number" value="<?= @$contact_number ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Email" name="email" value="<?= @$email ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Email" name="email" value="<?= @$email ?>" style="font-size:13px;font-style:italic;">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="NIC" name="nic" value="<?= @$nic ?>" style="font-size:13px;">
+                <div class="row mb-3 align-items-end">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="NIC" name="nic" value="<?= @$nic ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col">
                         <?php
                         $db = dbConn();
                         $sql = "SELECT * FROM designation";
                         $result = $db->query($sql);
                         ?>
-                        <select name="designation" class="form-control form-select" style="font-size:13px;">
+                        <select name="designation" class="form-control form-select" style="font-size:13px;font-style:italic;">
                             <option value="" style="text-align:center">-Designation-</option>
                             <?php
                             if ($result->num_rows > 0) {
@@ -119,13 +109,13 @@ include '../menu.php';
                             ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col">
                         <?php
                         $db = dbConn();
                         $sql = "SELECT * FROM user_role";
                         $result = $db->query($sql);
                         ?>
-                        <select name="user_role" class="form-control form-select" style="font-size:13px;">
+                        <select name="user_role" class="form-control form-select" style="font-size:13px;font-style:italic;">
                             <option value="" style="text-align:center">-User Role-</option>
                             <?php
                             if ($result->num_rows > 0) {
@@ -138,16 +128,16 @@ include '../menu.php';
                             ?>
                         </select>
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <select name="user_status" class="form-control form-select" style="font-size:13px;">
+                    <div class="col">
+                        <select name="user_status" class="form-control form-select" style="font-size:13px;font-style:italic;">
                             <option value="" style="text-align:center">-User Status-</option>
                             <option value="Active" <?php if (@$user_status == 'Active') { ?> selected <?php } ?>>Active</option>
                             <option value="Inactive" <?php if (@$user_status == 'Inactive') { ?> selected <?php } ?>>Inactive</option>
                         </select>
                     </div>
-                    <div class="mb-3 col-md-3">
-                        <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-search"></i> Search</button>
-                        <a href="<?= SYSTEM_PATH ?>employee/employee.php" class="btn btn-info btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-eraser"></i> Clear</a>
+                    <div class="col d-flex">
+                        <button type="submit" name="action" value="search" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;"><i class="bi bi-search"></i> Search</button>
+                        <a href="<?= SYSTEM_PATH ?>employee/employee.php" class="btn btn-info btn-sm flex-grow-1 ms-2" style="font-size:13px;"><i class="bi bi-eraser"></i> Clear</a>
                     </div>
                 </div>
             </form>
@@ -157,7 +147,7 @@ include '../menu.php';
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-striped table-sm" style="font-size:13px;">
-                    <thead class="bg-secondary">
+                    <thead class="bg-secondary text-white" style="font-size:13px;text-align:center;vertical-align:middle;font-family:Times New Roman">
                         <tr>
                             <th>#</th>
                             <th scope="col">Employee No</th>

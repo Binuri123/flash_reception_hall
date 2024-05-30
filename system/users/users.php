@@ -2,7 +2,8 @@
 <?php include '../menu.php'; ?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="pagetitle mt-4">
+        <h1>Users</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -12,31 +13,25 @@
     </div>
     <div class="container">
         <div class="row">
-            <?php
-            if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '6' || $_SESSION['user_role_id'] == '4') {
-                ?>
-                <div class="col-md-3">
-                    <a href="<?= SYSTEM_PATH ?>employee/employee.php" style="text-decoration:none;color:white">
-                        <div class="card bg-success text-white">
-                            <div class="card-body text-center">
-                                <?php
-                                $db = dbConn();
-                                $sql = "SELECT count(*) as total_employees FROM employee";
-                                $result = $db->query($sql);
-                                $row = $result->fetch_assoc();
-                                $employee_count = $row['total_employees'];
-                                ?>
-                                <h4># Employees<br><?= $employee_count ?></h4>
-                            </div>
+            <div class="col">
+                <a href="<?= SYSTEM_PATH ?>employee/employee.php" style="text-decoration:none;color:white">
+                    <div class="card bg-success text-success" style="--bs-bg-opacity: .1;">
+                        <div class="card-body text-center">
+                            <?php
+                            $db = dbConn();
+                            $sql = "SELECT count(*) as total_employees FROM employee";
+                            $result = $db->query($sql);
+                            $row = $result->fetch_assoc();
+                            $employee_count = $row['total_employees'];
+                            ?>
+                            <h4># Employees<br><?= $employee_count ?></h4>
                         </div>
-                    </a>
-                </div>
-                <?php
-            }
-            ?>
-            <div class="col-md-3">
+                    </div>
+                </a>
+            </div>
+            <div class="col">
                 <a href="<?= SYSTEM_PATH ?>customer/customer.php" style="text-decoration:none;color:white">
-                    <div class="card bg-secondary text-white">
+                    <div class="card bg-secondary text-secondary" style="--bs-bg-opacity:.1;">
                         <div class="card-body text-center">
                             <?php
                             $db = dbConn();
@@ -50,8 +45,9 @@
                     </div>
                 </a>
             </div>
+            <div class="col"></div>
+            <div class="col"></div>
         </div>
     </div>
 </main>
-
 <?php include '../footer.php'; ?>
