@@ -3,8 +3,11 @@ include '../header.php';
 include '../menu.php';
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-md-nowrap align-items-center mt-4">
-        <h1 class="h4">Employee</h1>
+    <div class="mt-4 pagetitle">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="h4 m-0">Employee</h1>
+            <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/add.php"><i class="bi bi-plus-circle"></i> New Employee</a>
+        </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -12,63 +15,55 @@ include '../menu.php';
                 <li class="breadcrumb-item active" aria-current="page">Employee</li>
             </ol>
         </nav>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-                <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/add.php"><i class="bi bi-plus-circle"></i> New Employee</a>
-            </div>
-        </div>
     </div>
     <?php
-    extract($_POST);
-    //var_dump($_POST);
+    extract($_GET);
     $where = NULL;
 
-    if ($_SERVER['REQUEST_METHOD'] == "POST" && @$action == 'search') {
-        $employee_no = cleanInput($employee_no);
-        $first_name = cleanInput($first_name);
-        $last_name = cleanInput($last_name);
-        $contact_number = cleanInput($contact_number);
-        $email = cleanInput($email);
-        $nic = cleanInput($nic);
+    $employee_no = cleanInput(@$employee_no);
+    $first_name = cleanInput(@$first_name);
+    $last_name = cleanInput(@$last_name);
+    $contact_number = cleanInput(@$contact_number);
+    $email = cleanInput(@$email);
+    $nic = cleanInput(@$nic);
 
-        if (!empty($employee_no)) {
-            //Wild card serach perform using like and %% signs
-            $where .= " e.employee_no LIKE '%$employee_no%' AND";
-        }
-        if (!empty($first_name)) {
-            //Wild card serach perform using like and %% signs
-            $where .= " e.first_name LIKE '%$first_name%' AND";
-        }
-        if (!empty($last_name)) {
-            //Wild card serach perform using like and %% signs
-            $where .= " e.last_name LIKE '%$last_name%' AND";
-        }
-        if (!empty($designation)) {
-            //Exact Search perform using = sign
-            $where .= " e.designation_id ='$designation' AND";
-        }
-        if (!empty($contact_number)) {
-            $where .= " (contact_number LIKE '%$contact_number%' OR alternate_number LIKE '%$contact_number%') AND";
-        }
-        if (!empty($email)) {
-            $where .= " email LIKE '%$email%' AND";
-        }
-        if (!empty($nic)) {
-            $where .= " nic LIKE '%$nic%' AND";
-        }
-        if (!empty($user_status)) {
-            //Exact Search perform using = sign
-            $where .= " user_status ='$user_status' AND";
-        }
-        if (!empty($where)) {
-            $where = substr($where, 0, -3);
-            $where = " WHERE $where";
-        }
+    if (!empty($employee_no)) {
+        //Wild card serach perform using like and %% signs
+        $where .= " e.employee_no LIKE '%$employee_no%' AND";
+    }
+    if (!empty($first_name)) {
+        //Wild card serach perform using like and %% signs
+        $where .= " e.first_name LIKE '%$first_name%' AND";
+    }
+    if (!empty($last_name)) {
+        //Wild card serach perform using like and %% signs
+        $where .= " e.last_name LIKE '%$last_name%' AND";
+    }
+    if (!empty($designation)) {
+        //Exact Search perform using = sign
+        $where .= " e.designation_id ='$designation' AND";
+    }
+    if (!empty($contact_number)) {
+        $where .= " (contact_number LIKE '%$contact_number%' OR alternate_number LIKE '%$contact_number%') AND";
+    }
+    if (!empty($email)) {
+        $where .= " email LIKE '%$email%' AND";
+    }
+    if (!empty($nic)) {
+        $where .= " nic LIKE '%$nic%' AND";
+    }
+    if (!empty($user_status)) {
+        //Exact Search perform using = sign
+        $where .= " user_status ='$user_status' AND";
+    }
+    if (!empty($where)) {
+        $where = substr($where, 0, -3);
+        $where = " WHERE $where";
     }
     ?>
     <div class="row">
         <div class="col-md-12">
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
+            <form method="get" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                 <div class="row mb-3 align-items-end">
                     <div class="col">
                         <input type="text" class="form-control" placeholder="Employee No" name="employee_no" value="<?= @$employee_no ?>" style="font-size:13px;font-style:italic;">
@@ -101,9 +96,9 @@ include '../menu.php';
                             <?php
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
-                                    ?>
+                            ?>
                                     <option value="<?= $row['designation_id'] ?>" <?php if ($row['designation_id'] == @$designation) { ?> selected <?php } ?>><?= $row['designation_name'] ?></option>
-                                    <?php
+                            <?php
                                 }
                             }
                             ?>
@@ -120,9 +115,9 @@ include '../menu.php';
                             <?php
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
-                                    ?>
+                            ?>
                                     <option value="<?= $row['user_role_id'] ?>" <?php if ($row['user_role_id'] == @$user_role) { ?> selected <?php } ?>><?= $row['role_name'] ?></option>
-                                    <?php
+                            <?php
                                 }
                             }
                             ?>
@@ -146,8 +141,8 @@ include '../menu.php';
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-striped table-sm" style="font-size:13px;">
-                    <thead class="bg-secondary text-white" style="font-size:13px;text-align:center;vertical-align:middle;font-family:Times New Roman">
+                <table class="table modified table-striped table-sm" style="font-size:13px;">
+                    <thead class="bg-secondary text-white" style="font-size:13px;text-align:center;vertical-align:middle;">
                         <tr>
                             <th>#</th>
                             <th scope="col">Employee No</th>
@@ -160,9 +155,9 @@ include '../menu.php';
                             <th scope="col">User Status</th>
                             <?php
                             if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '6') {
-                                ?>
+                            ?>
                                 <th></th>
-                                <?php
+                            <?php
                             }
                             ?>
                             <th></th>
@@ -170,19 +165,26 @@ include '../menu.php';
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "SELECT * FROM employee e "
-                                . "LEFT JOIN district d ON d.district_id=e.district_id "
-                                . "LEFT JOIN designation des ON des.designation_id=e.designation_id "
-                                . "LEFT JOIN user u ON u.user_id=e.user_id "
-                                . "LEFT JOIN user_role ur On ur.user_role_id=u.user_role_id "
-                                . "$where ORDER BY e.employee_id ASC";
+                        $sql_select = "SELECT * ";
+
+                        $sql_from = $sqlFrom = "FROM employee e "
+                            . "LEFT JOIN district d ON d.district_id=e.district_id "
+                            . "LEFT JOIN designation des ON des.designation_id=e.designation_id "
+                            . "LEFT JOIN user u ON u.user_id=e.user_id "
+                            . "LEFT JOIN user_role ur On ur.user_role_id=u.user_role_id "
+                            . "$where ORDER BY e.employee_id ASC";
+
+                        $sql_limit = paginate(@$page, 100);
+
+                        $totalRowCount = getNumRows($sql_from);
+
                         //print_r($sql);
                         $db = dbConn();
-                        $result = $db->query($sql);
+                        $result = $db->query($sql_select . $sql_from . $sql_limit);
                         if ($result->num_rows > 0) {
                             $i = 1;
                             while ($row = $result->fetch_assoc()) {
-                                ?>
+                        ?>
                                 <tr>
                                     <td><?= $i ?></td>
                                     <td><?= $row['employee_no'] ?></td>
@@ -195,20 +197,29 @@ include '../menu.php';
                                     <td><?= $row['user_status'] ?></td>
                                     <?php
                                     if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '6') {
-                                        ?>
+                                    ?>
                                         <td><a href="edit.php?employee_id=<?= $row['employee_id'] ?>" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></a></td>
-                                        <?php
+                                    <?php
                                     }
                                     ?>
                                     <td><a href="view.php?employee_id=<?= $row['employee_id'] ?>" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a></td>
                                 </tr>
-                                <?php
+                        <?php
                                 $i++;
                             }
                         }
                         ?>
                     </tbody>
                 </table>
+            </div>
+            <div class="mt-3">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
             </div>
         </div>
     </div>

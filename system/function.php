@@ -2,12 +2,15 @@
 
 //SYSTEM
 //My 1st Function - Clean the Input Data Before Saving into the Database
-function cleanInput($input = null) {
+function cleanInput($input = null)
+{
+    if ($input === null) return "";
     return htmlspecialchars(stripslashes(trim($input)));
 }
 
 //My 2nd Function - Create the Connection with the Database
-function dbConn() {
+function dbConn()
+{
     $servername = "localhost";
     $username = "root";
     $password = "1234";
@@ -73,8 +76,9 @@ function dbConn() {
 //        
 //        return $result;
 //    }
-function uploadFiles($file,$new_file_name,$destination) {
-//        $message = '';
+function uploadFiles($file, $new_file_name, $destination)
+{
+    //        $message = '';
     $result = array();
     $file = $_FILES[$file];
 
@@ -125,32 +129,34 @@ function uploadFiles($file,$new_file_name,$destination) {
 }
 
 //My 4th Function - Validate the Password
-function validatePassword($password) {
-    $message;
+function validatePassword($password)
+{
     $uppercase_letter = preg_match('@[A-Z]@', $password);
     $lowercase_letter = preg_match('@[a-z]@', $password);
     $numeric_value = preg_match('@[0-9]@', $password);
     $special_characters = preg_match('@[^\w]@', $password);
 
     if (!$uppercase_letter || !$lowercase_letter || !$numeric_value || !$special_characters) {
-        $message = "Password should include at least one capital letter, a simple letter, a number and a special character";
+        return "Password should include at least one capital letter, a simple letter, a number and a special character";
     } else if (strlen($password) < 8) {
-        $message = "Password should be at least 8 characters";
+        return "Password should be at least 8 characters";
     } else if (strpos($password, " ")) {
-        $message = "Password Should not Contain Spaces";
+        return "Password Should not Contain Spaces";
     }
-    return $message;
+    return "";
 }
 
 //My 5th Function - Validate the Text Fields
-function validateTextFields($value) {
+function validateTextFields($value)
+{
     if (!preg_match('/^[A-Za-z\s]+$/', $value)) {
         return TRUE;
     }
 }
 
 //My 6th Function - Validate the Contact Numbers
-function validateContactNumber($contact_number) {
+function validateContactNumber($contact_number)
+{
     $message;
     if (!preg_match('/^[0][0-9]{9}$/', $contact_number)) {
         return TRUE;
@@ -158,7 +164,8 @@ function validateContactNumber($contact_number) {
 }
 
 //My 7th Function - Validate Email
-function validateEmail($email) {
+function validateEmail($email)
+{
     $message;
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return TRUE;
@@ -166,7 +173,8 @@ function validateEmail($email) {
 }
 
 //My 8th Function - Validate the Pattern of NIC 
-function validateNICPattern($nic) {
+function validateNICPattern($nic)
+{
     $oldnic_pattern = "/^[0-9]{9}V$/";
     $newnic_pattern = "/^[0-9]{12}$/";
 
@@ -176,7 +184,8 @@ function validateNICPattern($nic) {
 }
 
 //My 9th Function - Validate the Gender
-function getGender($nic,$gender) {
+function getGender($nic, $gender)
+{
     $oldnic_pattern = "/^[0-9]{9}V$/";
     $newnic_pattern = "/^[0-9]{12}$/";
 
@@ -187,17 +196,18 @@ function getGender($nic,$gender) {
     }
     if ($days < 500) {
         $gen = 'Male';
-    }else{
+    } else {
         $gen = 'Female';
     }
-    
-    if($gender != $gen){
+
+    if ($gender != $gen) {
         return TRUE;
     }
 }
 
 //My 10th Function - Validate the Birth Date
-function getBirthDate($nic,$dob) {
+function getBirthDate($nic, $dob)
+{
     $oldnic_pattern = "/^[0-9]{9}V$/";
     $newnic_pattern = "/^[0-9]{12}$/";
     $days = 0;
@@ -212,17 +222,18 @@ function getBirthDate($nic,$dob) {
     if ($days >= 500) {
         $days -= 500;
     }
-    $birthdate = date_create_from_format('Yz',$birthyear.$days);
+    $birthdate = date_create_from_format('Yz', $birthyear . $days);
     $birthdate->modify('-2 days');
     $birthdate = $birthdate->format('Y-m-d');
     //var_dump($birthdate);
-    if($birthdate == $dob){
+    if ($birthdate == $dob) {
         return TRUE;
     }
 }
 
 //My 11th Function
-function getUpdatedFields($old_values, $new_values) {
+function getUpdatedFields($old_values, $new_values)
+{
     $updated_fields = array();
     foreach ($old_values as $exfield => $exvalue) {
         foreach ($new_values as $upfield => $upvalue) {
@@ -236,7 +247,8 @@ function getUpdatedFields($old_values, $new_values) {
 }
 
 //My 12th Function
-function generatePassword() {
+function generatePassword()
+{
     $length = 8;
     $characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!#";
     $password = substr(str_shuffle($characters), 0, $length);
@@ -245,7 +257,8 @@ function generatePassword() {
 }
 
 //My 13th Function
-function generateUsername() {
+function generateUsername()
+{
     $length = 8;
     $characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     $username = substr(str_shuffle($characters), 0, $length);
@@ -253,17 +266,41 @@ function generateUsername() {
     return $username;
 }
 
-function hasRole($role_id){
+function hasRole($role_id)
+{
     return $_SESSION['user_role_id'] == $role_id;
 }
 
-function hasAnyRole($role_ids){
-    foreach ($role_ids as $role_id){
-        if(hasRole($role_id)){
+function hasAnyRole($role_ids)
+{
+    foreach ($role_ids as $role_id) {
+        if (hasRole($role_id)) {
             return true;
         }
     }
     return FALSE;
 }
 
-?>
+function paginate($page, $pageSize)
+{
+    if ($page === null) {
+        $page = 1;
+    }
+    $startIndex = ($page - 1) * $pageSize;
+
+    return " LIMIT $startIndex, $pageSize";
+}
+
+function getNumRows($sqlStartWithFrom)
+{
+    $sql = "SELECT count(*) as c $sqlStartWithFrom";
+    $db = dbConn();
+    $result = $db->query($sql);
+    if ($result->num_rows == 0) {
+        $db->close();
+        return 0;
+    }
+    $count =  $result->fetch_assoc()['c'];
+    $db->close();
+    return $count;
+}

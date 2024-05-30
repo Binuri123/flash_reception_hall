@@ -116,3 +116,11 @@ body {
   font-weight: 600;
   color: #012970;
 }
+
+.modified.table thead th {
+  font-weight: 500;
+  text-align: left;
+}
+.modified.table tbody tr > *{
+  vertical-align: middle;
+}
