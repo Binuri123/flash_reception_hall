@@ -102,6 +102,22 @@ include '../header.php';
                         <div class="row">
                             <div class="col-md-3"></div>
                             <div class="col-md-2 mb-3">
+                                <label for="event_date" class="form-label"><span class="text-danger">* </span>Event Date</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <?php
+                                $today = date('Y-m-d');
+                                $mindate = date('Y-m-d', strtotime('+14 days', strtotime($today)));
+                                $maxdate = date('Y-m-d', strtotime('+1 year', strtotime($today)));
+                                ?>
+                                <input type="date" min="<?= $mindate ?>" max="<?= $maxdate ?>" class="form-control" placeholder="Pick a Date" id="event_date" name="event_date" value="<?= @$event_date ?>" style="font-size:13px;">
+                                <div class="text-danger"><?= @$message['error_event_date'] ?></div>
+                            </div>
+                            <div class="col-md-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-2 mb-3">
                                 <label for="event" class="form-label"><span class="text-danger">* </span>Event</label>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -125,7 +141,7 @@ include '../header.php';
                             <div class="col-md-3"></div>
                         </div>
                         <?php
-                        if (!empty($event)) {
+                        if (!empty($event) && !empty($event_date)) {
                             ?>
                             <div class="row">
                                 <div class="col-md-3"></div>
@@ -137,7 +153,11 @@ include '../header.php';
                                         <option value="">-Select a Function Mode-</option>
                                         <?php
                                         $db = dbConn();
-                                        $sql = "SELECT efm.event_function_mode_id,fm.function_mode,efm.start_time,efm.end_time from event_function_mode efm LEFT JOIN function_mode fm ON fm.function_mode_id=efm.function_mode_id WHERE event_id='$event'";
+                                        $sql_existing_events = "SELECT ";
+                                        $sql = "SELECT efm.event_function_mode_id,fm.function_mode,efm.start_time,"
+                                                . "efm.end_time from event_function_mode efm "
+                                                . "LEFT JOIN function_mode fm ON fm.function_mode_id=efm.function_mode_id "
+                                                . "WHERE event_id='$event'";
                                         $result = $db->query($sql);
                                         while ($row = $result->fetch_assoc()) {
                                             $event_start_time = $row['start_time'];
@@ -156,22 +176,6 @@ include '../header.php';
                             <?php
                         }
                         ?>
-                        <div class="row">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-2 mb-3">
-                                <label for="event_date" class="form-label"><span class="text-danger">* </span>Event Date</label>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <?php
-                                $today = date('Y-m-d');
-                                $mindate = date('Y-m-d', strtotime('+14 days', strtotime($today)));
-                                $maxdate = date('Y-m-d', strtotime('+1 year', strtotime($today)));
-                                ?>
-                                <input type="date" min="<?= $mindate ?>" max="<?= $maxdate ?>" class="form-control" placeholder="Pick a Date" id="event_date" name="event_date" value="<?= @$event_date ?>" style="font-size:13px;">
-                                <div class="text-danger"><?= @$message['error_event_date'] ?></div>
-                            </div>
-                            <div class="col-md-3"></div>
-                        </div>
                         <div class="row">
                             <div class="col-md-3"></div>
                             <div class="col-md-2 mb-3">
