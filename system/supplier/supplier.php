@@ -3,24 +3,23 @@ include '../header.php';
 include '../menu.php';
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="mt-4 pagetitle">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="h4 m-0">Suppliers</h1>
+            <?php
+                if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '3' || $_SESSION['user_role_id'] == '6') {
+            ?>
+                    <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>supplier/add.php"><i class="bi bi-plus-circle"></i> New Supplier</a>
+            <?php
+                }
+            ?>
+        </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Supplier</li>
             </ol>
         </nav>
-        <?php
-        if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '3' || $_SESSION['user_role_id'] == '6') {
-            ?>
-            <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group me-2">
-                    <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>supplier/add.php"><i class="bi bi-plus-circle"></i> New Supplier</a>
-                </div>
-            </div>
-            <?php
-        }
-        ?>
     </div>
     <?php
     extract($_POST);
@@ -69,36 +68,20 @@ include '../menu.php';
     ?>
     <div class="row">
         <div class="col-md-12">
-            <h3>Supplier List</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
             <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
-                <div class="row">
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Supplier No" name="supplier_no" value="<?= @$supplier_no ?>" style="font-size:13px;">
+                <div class="row mb-3 align-items-end">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Supplier No" name="supplier_no" value="<?= @$supplier_no ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="First Name" name="first_name" value="<?= @$first_name ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First Name" name="first_name" value="<?= @$first_name ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Last Name" name="last_name" value="<?= @$last_name ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="NIC" name="nic" value="<?= @$nic ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Contact Number" name="contact_number" value="<?= @$contact_number ?>" style="font-size:13px;">
-                    </div>
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Email" name="email" value="<?= @$email ?>" style="font-size:13px;">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="NIC" name="nic" value="<?= @$nic ?>" style="font-size:13px;">
-                    </div>
-                    <div class="mb-3 col-md-3">
-                        <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-search"></i> Search</button>
-                        <a href="<?= SYSTEM_PATH ?>supplier/supplier.php" class="btn btn-info btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-eraser"></i> Clear</a>
+                    <div class="col d-flex">
+                        <button type="submit" name="action" value="search" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
+                        <a href="<?= SYSTEM_PATH ?>supplier/supplier.php" class="btn btn-info btn-sm flex-grow-1 ms-2" style="font-size:13px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
                     </div>
                 </div>
             </form>
@@ -107,8 +90,8 @@ include '../menu.php';
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-striped table-sm" style="font-size:13px;">
-                    <thead class="bg-secondary">
+                <table class="table modified table-striped table-sm" style="font-size:13px;">
+                    <thead class="bg-secondary text-white" style="font-size:13px;text-align:center;vertical-align:middle;">
                         <tr style="text-align:center;">
                             <th>#</th>
                             <th scope="col">Supplier No</th>
@@ -116,13 +99,11 @@ include '../menu.php';
                             <th scope="col">Contact No</th>
                             <th scope="col">Email</th>
                             <th scope="col">NIC</th>
-                            <th scope="col">Agreement Start Date</th>
-                            <th scope="col">Agreement End Date</th>
-                            <th scope="col">Agreement Status</th>
+                            <th scope="col">Agreement<br>Status</th>
                             <?php
                             if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '3' || $_SESSION['user_role_id'] == '6') {
                                 ?>
-                                <th></th>
+                            <th scope="col"></th>
                                 <?php
                             }
                             ?>
@@ -132,7 +113,8 @@ include '../menu.php';
                     <tbody>
                         <?php
                         $sql = "SELECT * FROM supplier s "
-                                . "LEFT JOIN agreement_status a ON a.agreement_status_id=s.agreement_status_id $where ORDER BY s.supplier_id ASC";
+                                . "LEFT JOIN agreement_status a ON a.agreement_status_id=s.agreement_status_id "
+                                . "$where ORDER BY s.add_date DESC";
                         //print_r($sql);
                         $db = dbConn();
                         $result = $db->query($sql);
@@ -142,14 +124,12 @@ include '../menu.php';
                                 ?>
                                 <tr>
                                     <td><?= $i ?></td>
-                                    <td style="text-align:center;"><?= $row['supplier_no'] ?></td>
+                                    <td><?= $row['supplier_no'] ?></td>
                                     <td><?= $row['first_name'] . " " . $row['last_name'] ?></td>
-                                    <td style="text-align:center;"><?= $row['contact_number'] ?><br><?= $row['alternate_number'] ?></td>
-                                    <td style="text-align:center;"><?= $row['email'] ?></td>
-                                    <td style="text-align:center;"><?= $row['nic'] ?></td>
-                                    <td style="text-align:center;"><?= $row['agreement_start_date'] ?></td>
-                                    <td style="text-align:center;"><?= $row['agreement_end_date'] ?></td>
-                                    <td style="text-align:center;"><?= $row['agreement_status'] ?></td>
+                                    <td><?= $row['contact_number'] ?><br><?= $row['alternate_number'] ?></td>
+                                    <td><?= $row['email'] ?></td>
+                                    <td><?= $row['nic'] ?></td>
+                                    <td><?= $row['agreement_status'] ?></td>
                                     <?php
                                     if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '3' || $_SESSION['user_role_id'] == '6') {
                                         ?>

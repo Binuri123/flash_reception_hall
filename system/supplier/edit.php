@@ -5,7 +5,7 @@ include '../menu.php';
 include '../assets/phpmail/mail.php';
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -231,8 +231,8 @@ include '../assets/phpmail/mail.php';
                     <form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-9">
-                                <div class="row">
-                                    <div class="mb-2 col-md-3">
+                                <div class="row mb-2">
+                                    <div class="col">
                                         <label class="form-label"><span class="text-danger">*</span> Title</label><br>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="title" id="mr" value="Mr" <?php if (isset($title) && $title == 'Mr') { ?> checked <?php } ?> style="font-size:10px;">
@@ -248,39 +248,39 @@ include '../assets/phpmail/mail.php';
                                         </div>
                                         <div class="text-danger"><?= @$message["error_title"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="first_name" class="form-label"><span class="text-danger">*</span> First Name</label>
                                         <input type="text" class="form-control" id="first_name" name="first_name" value="<?= @$first_name ?>" style="font-size:13px;" placeholder="Ex: Kamal">
                                         <div class="text-danger"><?= @$message["error_first_name"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="middle_name" class="form-label"> Middle Name [Optional]</label>
                                         <input type="text" class="form-control" id="middle_name" name="middle_name" value="<?= @$middle_name ?>" style="font-size:13px;" placeholder="Ex: Ananda">
                                         <div class="text-danger"><?= @$message["error_middle_name"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="last_name" class="form-label"><span class="text-danger">*</span> Last Name</label>
                                         <input type="text" class="form-control" id="last_name" name="last_name" value="<?= @$last_name ?>" style="font-size:13px;" placeholder="Ex: Perera">
                                         <div class="text-danger"><?= @$message["error_last_name"] ?></div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="mb-2 col-md-3">
+                                <div class="row mb-2">
+                                    <div class="col">
                                         <label for="house_no" class="form-label"><span class="text-danger">*</span> House No/Name</label>
                                         <input type="text" class="form-control" id="house_no" name="house_no" value="<?= @$house_no ?>" style="font-size:13px;" placeholder="Ex: No.123">
                                         <div class="text-danger"><?= @$message["error_house_no"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="street" class="form-label"><span class="text-danger">*</span> Street Name</label>
                                         <input type="text" class="form-control" id="street" name="street" value="<?= @$street ?>" style="font-size:13px;" placeholder="Ex: First Avenue">
                                         <div class="text-danger"><?= @$message["error_street"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="city" class="form-label"><span class="text-danger">*</span> City</label>
                                         <input type="text" class="form-control" id="city" name="city" value="<?= @$city ?>" style="font-size:13px;" placeholder="Ex: Dematagoda">
                                         <div class="text-danger"><?= @$message["error_city"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="district" class="form-label"><span class="text-danger">*</span> District</label>
                                         <select class="form-control form-select" id="district" name="district" style="font-size:13px;">
                                             <option value="" style="text-align:center;">-Select a District-</option>
@@ -298,45 +298,45 @@ include '../assets/phpmail/mail.php';
                                         <div class="text-danger"><?= @$message["error_district"] ?></div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="mb-2 col-md-3">
+                                <div class="row mb-2">
+                                    <div class="col">
                                         <label for="contact_number" class="form-label"><span class="text-danger">*</span> Contact Number</label>
                                         <input type="text" class="form-control" id="contact_number" name="contact_number" value="<?= @$contact_number ?>" style="font-size:13px;" placeholder="Ex: 0123456789">
                                         <div class="text-danger"><?= @$message["error_contact_number"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="alternate_number" class="form-label">Alternate Number[Optional]</label>
                                         <input type="text" class="form-control" id="alternate_number" name="alternate_number" value="<?= @$alternate_number ?>" style="font-size:13px;" placeholder="Ex: 0123456789">
                                         <div class="text-danger"><?= @$message["error_alternate_number"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="email" class="form-label"><span class="text-danger">*</span> Email</label>
                                         <input type="text" class="form-control" id="email" name="email" value="<?= @$email ?>" style="font-size:13px;" placeholder="Ex: kamal@gmail.com">
                                         <div class="text-danger"><?= @$message["error_email"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="nic" class="form-label"><span class="text-danger">*</span> NIC</label>
                                         <input type="text" class="form-control" id="nic" name="nic" value="<?= @$nic ?>" style="font-size:13px;" placeholder="Ex: 981234567V">
                                         <div class="text-danger"><?= @$message["error_nic"] ?></div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="mb-2 col-md-3">
+                                <div class="row mb-2">
+                                    <div class="col">
                                         <label for="company_name" class="form-label"><span class="text-danger">*</span> Business/Company Name</label>
                                         <input type="text" class="form-control" id="company_name" name="company_name" value="<?= @$company_name ?>" style="font-size:13px;" placeholder="Ex: Lassana Flora">
                                         <div class="text-danger"><?= @$message["error_company_name"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="company_reg_no" class="form-label"><span class="text-danger">*</span> Business Registration No</label>
                                         <input type="text" class="form-control" id="company_reg_no" name="company_reg_no" value="<?= @$company_reg_no ?>" style="font-size:13px;" placeholder="Ex: BR20230802">
                                         <div class="text-danger"><?= @$message["error_company_reg_no"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="start_date" class="form-label"><span class="text-danger">*</span> Agreement Start Date</label>
                                         <input type="date" class="form-control" id="start_date" name="start_date" value="<?= @$start_date ?>" min="2022-01-01" style="font-size:13px;">
                                         <div class="text-danger"><?= @$message["error_start_date"] ?></div>
                                     </div>
-                                    <div class="mb-2 col-md-3">
+                                    <div class="col">
                                         <label for="end_date" class="form-label"><span class="text-danger">*</span> Agreement End Date</label>
                                         <input type="date" class="form-control" id="end_date" name="end_date" value="<?= @$end_date ?>" min="2022-01-01" style="font-size:13px;">
                                         <div class="text-danger"><?= @$message["error_end_date"] ?></div>

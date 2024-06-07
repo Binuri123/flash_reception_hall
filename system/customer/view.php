@@ -3,7 +3,7 @@ include '../header.php';
 include '../menu.php';
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
         <div class="btn-toolbar mb-2 mb-md-0">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -64,7 +64,7 @@ include '../menu.php';
                                         </tr>
                                         <tr>
                                             <td>Customer Name</td>
-                                            <td><?= $row['title_name'] . " " . $row['first_name'] . " " . $row['last_name'] ?></td>
+                                            <td><?= $row['title_name'] . ". " . $row['first_name'] . " " . $row['last_name'] ?></td>
                                         </tr>
                                         <tr>
                                             <td>Address</td>
@@ -74,10 +74,16 @@ include '../menu.php';
                                             <td>Contact Number</td>
                                             <td><?= $row['contact_number'] ?></td>
                                         </tr>
-                                        <tr>
-                                            <td>Alternate Contact Number</td>
-                                            <td><?= $row['alternate_number'] ?></td>
-                                        </tr>
+                                        <?php
+                                            if($row['alternate_number'] != NULL){
+                                        ?>
+                                                <tr>
+                                                    <td>Alternate Contact Number</td>
+                                                    <td><?= $row['alternate_number'] ?></td>
+                                                </tr>
+                                        <?php
+                                            }
+                                        ?>
                                         <tr>
                                             <td>Email</td>
                                             <td><?= $row['email'] ?></td>

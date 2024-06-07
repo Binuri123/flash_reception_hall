@@ -208,6 +208,7 @@ function getGender($nic, $gender)
 //My 10th Function - Validate the Birth Date
 function getBirthDate($nic, $dob)
 {
+    date_default_timezone_set('Asia/Colombo');
     $oldnic_pattern = "/^[0-9]{9}V$/";
     $newnic_pattern = "/^[0-9]{12}$/";
     $days = 0;
@@ -222,10 +223,10 @@ function getBirthDate($nic, $dob)
     if ($days >= 500) {
         $days -= 500;
     }
+    $days--;
     $birthdate = date_create_from_format('Yz', $birthyear . $days);
-    $birthdate->modify('-2 days');
+    //$birthdate->modify('-2 days');
     $birthdate = $birthdate->format('Y-m-d');
-    //var_dump($birthdate);
     if ($birthdate == $dob) {
         return TRUE;
     }

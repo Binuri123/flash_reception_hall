@@ -2,7 +2,8 @@
 <?php include '../menu.php'; ?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="pagetitle mt-4">
+        <h1>Customers</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -58,43 +59,38 @@
     ?>
     <div class="row">
         <div class="col-md-12">
-            <h3>Customer List</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
             <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
-                <div class="row">
-                    <div class="mb-3 col-md-3">
-                        <input type="text" class="form-control" placeholder="Customer No" name="customer_no" value="<?= @$customer_no ?>" style="font-size:13px;">
+                <div class="row mb-3 align-items-end">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Customer No" name="customer_no" value="<?= @$customer_no ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-3">
-                        <input type="text" class="form-control" placeholder="First Name" name="first_name" value="<?= @$first_name ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First Name" name="first_name" value="<?= @$first_name ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-3">
-                        <input type="text" class="form-control" placeholder="Last Name" name="last_name" value="<?= @$last_name ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Last Name" name="last_name" value="<?= @$last_name ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-3">
-                        <select name="user_status" class="form-control form-select" style="font-size:13px;">
+                    <div class="col">
+                        <select name="user_status" class="form-control form-select" style="font-size:13px;font-style:italic;">
                             <option value="" style="text-align:center">-User Status-</option>
                             <option value="Active" <?php if (@$user_status == 'Active') { ?> selected <?php } ?>>Active</option>
                             <option value="Inactive" <?php if (@$user_status == 'Inactive') { ?> selected <?php } ?>>Inactive</option>
                         </select>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="mb-3 col-md-3">
-                        <input type="text" class="form-control" placeholder="Contact Number" name="contact_number" value="<?= @$contact_number ?>" style="font-size:13px;">
+                <div class="row mb-3 align-items-end">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Contact Number" name="contact_number" value="<?= @$contact_number ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-3">
-                        <input type="text" class="form-control" placeholder="Email" name="email" value="<?= @$email ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Email" name="email" value="<?= @$email ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-3">
-                        <input type="text" class="form-control" placeholder="NIC" name="nic" value="<?= @$nic ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="NIC" name="nic" value="<?= @$nic ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-3">
-                        <button type="submit" name="action" value="search" class="btn btn-warning btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-search"></i> Search</button>
-                        <a href="<?= SYSTEM_PATH ?>customer/customer.php" class="btn btn-info btn-sm" style="font-size:13px;width:100px;"><i class="bi bi-eraser"></i> Clear</a>
+                    <div class="col d-flex">
+                        <button type="submit" name="action" value="search" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
+                        <a href="<?= SYSTEM_PATH ?>customer/customer.php" class="btn btn-info btn-sm flex-grow-1 ms-2" style="font-size:13px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
                     </div>
                 </div>
             </form>
@@ -103,8 +99,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-striped table-sm" style="font-size:13px;vertical-align: middle">
-                    <thead class="bg-secondary" style="text-align:center;">
+                <table class="table modified table-striped table-sm" style="font-size:13px;">
+                    <thead class="bg-secondary text-white" style="font-size:13px;text-align:center;vertical-align:middle;">
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Customer No</th>
@@ -112,9 +108,8 @@
                             <th scope="col">NIC</th>
                             <th scope="col">Mobile</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Address</th>
                             <th scope="col">User Status</th>
-                            <th></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -136,7 +131,6 @@
                                     <td><?= $row['nic'] ?></td>
                                     <td><?= $row['contact_number'] . "<br>" . $row['alternate_number'] ?></td>
                                     <td><?= $row['email'] ?></td>
-                                    <td><?= $row['house_no'] . ",<br>" . $row['street'] . ",<br>" . $row['city'] . ",<br>" . $row['district_name'] ?></td>
                                     <td><?= $row['user_status'] ?></td>
                                     <td style="text-align:center;"><a href="view.php?customer_id=<?= $row['customer_id'] ?>" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a></td>
                                 </tr>

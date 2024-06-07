@@ -27,7 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         //Query for retreiving data record with given credentials 
         $sql = "SELECT * FROM user u"
                 . " LEFT JOIN user_role r ON r.user_role_id = u.user_role_id"
-                . " WHERE u.username = '$username' AND u.password = '$password'";
+                . " WHERE u.username = '$username' AND u.password = '$password' "
+                . "AND u.user_role_id != 8 AND u.user_role_id != 7";
         //creating the database connectivity
         $db = dbConn();
         //Executing the query
@@ -39,7 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         } else {
             $row = $result->fetch_assoc();
             //Storing the relevant data into the session
-            if ($row['user_role_id'] != '8' && $row['user_status'] == 'Active') {
+            
+            if ($row['user_status'] == 'Active') {
                 $_SESSION['userid'] = $row['user_id'];
                 $_SESSION['user_role'] = $row['role_name'];
                 $_SESSION['user_role_id'] = $row['user_role_id'];

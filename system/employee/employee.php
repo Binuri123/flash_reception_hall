@@ -131,8 +131,8 @@ include '../menu.php';
                         </select>
                     </div>
                     <div class="col d-flex">
-                        <button type="submit" name="action" value="search" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;"><i class="bi bi-search"></i> Search</button>
-                        <a href="<?= SYSTEM_PATH ?>employee/employee.php" class="btn btn-info btn-sm flex-grow-1 ms-2" style="font-size:13px;"><i class="bi bi-eraser"></i> Clear</a>
+                        <button type="submit" name="action" value="search" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
+                        <a href="<?= SYSTEM_PATH ?>employee/employee.php" class="btn btn-info btn-sm flex-grow-1 ms-2" style="font-size:13px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
                     </div>
                 </div>
             </form>
@@ -156,11 +156,11 @@ include '../menu.php';
                             <?php
                             if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '6') {
                             ?>
-                                <th></th>
+                                <th scope="col"></th>
                             <?php
                             }
                             ?>
-                            <th></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
