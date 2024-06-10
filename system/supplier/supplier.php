@@ -99,7 +99,7 @@ include '../menu.php';
                             <th scope="col">Contact No</th>
                             <th scope="col">Email</th>
                             <th scope="col">NIC</th>
-                            <th scope="col">Agreement<br>Status</th>
+                            <th scope="col">Agreement Status</th>
                             <?php
                             if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '3' || $_SESSION['user_role_id'] == '6') {
                                 ?>

@@ -238,7 +238,7 @@ include '../menu.php';
 
             if ($old_email != $email) {
                 $sql = "UPDATE users SET username='$email' WHERE user_id = "
-                        . "(SELECT user_id FROM employee WHERE employee_id='$employee_id')";
+                       . "(SELECT user_id FROM employee WHERE employee_id='$employee_id')";
                 $db->query($sql);
             }
 
@@ -257,7 +257,7 @@ include '../menu.php';
     ?>
     <div class="row">
         <div class="mb-3 col-md-12">
-            <div class="card bg-light">
+            <div class="card bg-success" style="--bs-bg-opacity: .1;">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
