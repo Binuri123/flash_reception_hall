@@ -5,7 +5,11 @@ include '../menu.php';
 include '../assets/phpmail/mail.php';
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+    <div class="mt-3 pagetitle">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="h4 m-0">Add New Employee</h1>
+            <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/employee.php"><i class="bi bi-calendar"></i> Search Employee</a>
+        </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -14,11 +18,6 @@ include '../assets/phpmail/mail.php';
                 <li class="breadcrumb-item active" aria-current="page">Add</li>
             </ol>
         </nav>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-                <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/employee.php"><i class="bi bi-calendar"></i> Search Employee</a>
-            </div>
-        </div>
     </div>
     <?php
     //Extract the POST Array
@@ -233,11 +232,11 @@ include '../assets/phpmail/mail.php';
     ?>
     <div class="row">
         <div class="mb-3 col-md-12">
-            <div class="card bg-light">
+            <div class="card bg-success" style="--bs-bg-opacity: .1;">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4>Add Employee</h4>
+                            <h4>Add New Employee</h4>
                         </div>
                         <div class="col-md-6" style="text-align:right">
                             <p class="text-danger text-right">* Required</p>

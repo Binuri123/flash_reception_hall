@@ -5,7 +5,11 @@ include '../menu.php';
 ?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+    <div class="mt-3 pagetitle">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="h4 m-0">Update Employee Details</h1>
+            <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/employee.php" style="font-size:13px;"><i class="bi bi-calendar"></i> Search Employee</a>
+        </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -14,11 +18,6 @@ include '../menu.php';
                 <li class="breadcrumb-item active" aria-current="page">Update</li>
             </ol>
         </nav>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-                <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/employee.php" style="font-size:13px;"><i class="bi bi-calendar"></i> Search Employee</a>
-            </div>
-        </div>
     </div>
     <?php
     if ($_SERVER['REQUEST_METHOD'] == "GET") {
@@ -226,7 +225,7 @@ include '../menu.php';
             $sql = "SELECT first_name,middle_name,calling_name,house_no,street,city,district_id as district,"
                     . "contact_number,alternate_number,email,dob,nic,gender,designation_id as designation,"
                     . "recruitment_date,employement_status_id as employement_status,user_role_id as user_role,"
-                    . "user_status FROM employee e LEFT JOIN users u ON u.user_id=e.user_id "
+                    . "user_status FROM employee e LEFT JOIN user u ON u.user_id=e.user_id "
                     . "WHERE employee_id='$employee_id'";
             print_r($sql);
             $result = $db->query($sql);

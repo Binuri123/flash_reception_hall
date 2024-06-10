@@ -2,7 +2,7 @@
 <?php include '../menu.php'; ?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="pagetitle mt-4">
+    <div class="pagetitle mt-3">
         <h1>Users</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">

@@ -223,10 +223,16 @@ function getBirthDate($nic, $dob)
     if ($days >= 500) {
         $days -= 500;
     }
-    $days--;
+    //$days--;
     $birthdate = date_create_from_format('Yz', $birthyear . $days);
-    //$birthdate->modify('-2 days');
+    if($days >= 500){
+        $birthdate->modify('-2 days');
+    }else{
+        $birthdate->modify('-1 days');
+    }
+    //var_dump($birthdate);
     $birthdate = $birthdate->format('Y-m-d');
+    var_dump($birthdate);
     if ($birthdate == $dob) {
         return TRUE;
     }

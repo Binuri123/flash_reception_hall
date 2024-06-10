@@ -2,7 +2,16 @@
 <?php include '../menu.php';?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+    <div class="mt-3 pagetitle">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="h4 m-0">Add New Employee</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/add.php"><i class="bi bi-plus-circle"></i> New Employee</a>
+                    <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/employee.php"><i class="bi bi-calendar"></i> Search Employee</a>
+                </div>
+            </div>
+        </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -12,12 +21,6 @@
                 <li class="breadcrumb-item active" aria-current="page">Add Success</li>
             </ol>
         </nav>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-                <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/add.php"><i class="bi bi-plus-circle"></i> New Employee</a>
-                <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>employee/employee.php"><i class="bi bi-calendar"></i> Search Employee</a>
-            </div>
-        </div>
     </div>
   <?php
     //check the request method
@@ -43,31 +46,99 @@
     ?>
     <div class="row">
         <div class="mb-3 col-md-2"></div>
-        <div class="alert alert-success col-md-8" role="alert">
-            <div class="row">
+        <div class="alert alert-success col-md-8" role="alert" style="--bs-bg-opacity: .1;">
+            <div class="row mb-2">
                 <div class="col-md-12" style="text-align:center;">
                     <h4>Successfully Added...!!!</h4>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-8">
-                    <h5 style="font-weight:bold;margin:0;">Registered Employee Details</h5>
-                    <p style="font-weight:bold;margin:0;">Registration Number: <?= $row['employee_no'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Title: <?= $row['title'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Full Name: <?= $row['first_name'] . " " . $row['middle_name'] . " " . $row['last_name'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Calling Name: <?= $row['calling_name'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Address: <?= $row['house_no'] . "," . $row['street'] . "," . $row['city'] . "," . $row['district_name'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Contact Number: <?= $row['contact_number'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Alternate Number: <?= $row['alternate_number'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Email: <?= $row['email'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Date of Birth: <?= $row['dob'] ?></p>
-                    <p style="font-weight:bold;margin:0;">NIC: <?= $row['nic'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Gender: <?= $row['gender'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Designation: <?= $row['designation_name'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Recruitment Date: <?= $row['recruitment_date'] ?></p>
-                    <p style="font-weight:bold;margin:0;">Employment Status: <?= $row['employement_status_name'] ?></p>
-                    <p style="font-weight:bold;margin:0;">User Role: <?= $row['role_name'] ?></p>
-                    <p style="font-weight:bold;margin:0;">User Status: <?= $row['user_status'] ?></p>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-sm table-bordered border-secondary">
+                            <thead class="bg-secondary-light border-dark text-center">
+                                <tr>
+                                    <th colspan="2">Registered Employee Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Registration Number</td>
+                                    <td><?= $row['employee_no'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Title</td>
+                                    <td><?= $row['title'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Full Name</td>
+                                    <td><?= $row['first_name'] . " " . $row['middle_name'] . " " . $row['last_name'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Calling Name</td>
+                                    <td><?= $row['calling_name'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Address</td>
+                                    <td><?= $row['house_no'] . "," . $row['street'] . "," . $row['city'] . "," . $row['district_name'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Contact Number</td>
+                                    <td><?= $row['contact_number'] ?></td>
+                                </tr>
+                                <?php
+                                if($row['alternate_number']!=null){
+                                ?>
+                                <tr>
+                                    <td>Alternate Number</td>
+                                    <td><?= $row['alternate_number'] ?></td>
+                                </tr>
+                                <?php
+                                }
+                                ?>
+                                <tr>
+                                    <td>Alternate Number</td>
+                                    <td><?= $row['alternate_number'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td><?= $row['email'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Date of Birth</td>
+                                    <td><?= $row['dob'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>NIC</td>
+                                    <td><?= $row['nic'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Gender</td>
+                                    <td><?= $row['gender'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Designation</td>
+                                    <td><?= $row['designation_name'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Recruitment Date</td>
+                                    <td><?= $row['recruitment_date'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Employment Status</td>
+                                    <td><?= $row['employement_status_name'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>User Role</td>
+                                    <td><?= $row['role_name'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>User Status</td>
+                                    <td><?= $row['user_status'] ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <?php
@@ -93,9 +164,6 @@
             }
         }
     }    
-  ?>
-        
-        
+  ?>      
 </main>
-
  <?php include '../footer.php';?>
