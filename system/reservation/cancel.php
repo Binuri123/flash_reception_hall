@@ -5,13 +5,14 @@ include '../menu.php';
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
     <div class="mt-3 pagetitle">
         <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
-            <h1 class="h4 m-0">Reservation Details</h1>
+            <h1 class="h4 m-0">Cancel Reservation</h1>
         </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>reservation/reservation.php">Reservations</a></li>
-                <li class="breadcrumb-item active" aria-current="page">View</li>
+                <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>reservation/past_due_reservation.php">Past Due</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Cancel Reservation</li>
             </ol>
         </nav>
     </div>
@@ -31,7 +32,7 @@ include '../menu.php';
                 <div class="card bg-light">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-12 mt-3 mb-3" style="text-align:center;">
+                            <div class="col-md-12 mt-1 mb-1" style="text-align:center;">
                                 <h4>Reservation Details</h4>
                             </div>
                         </div>
@@ -202,91 +203,6 @@ include '../menu.php';
                                 </div>
                             </div>
                             <div class="col-md-2"></div>
-                        </div>
-                        <div class="row">
-                            <?php
-                            $sql_addon_items = "SELECT * FROM reservation_addon_items WHERE reservation_id='".$row['reservation_id']."'";
-                            //print_r($sql_addon_items);
-                            $result_addon_items = $db->query($sql_addon_items);
-                            if ($result_addon_items->num_rows > 0) {
-                                ?>
-                                <div class="col-md-6">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-light table-bordered" style="font-size:13px;">
-                                            <thead style="text-align:center;">
-                                                <tr>
-                                                    <th colspan="2">Selected Add-on Items</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>Item Name</th>
-                                                    <th>Portion Quantity</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody style="text-align:left;">
-                                                <?php
-                                                while ($row_addon_items = $result_addon_items->fetch_assoc()) {
-                                                    //var_dump($row_addon_items);
-                                                    $sql_addon_item_list = "SELECT i.item_name,ai.portion_qty FROM menu_item i LEFT JOIN reservation_addon_items ai ON ai.item_id=i.item_id WHERE ai.item_id=" . $row_addon_items['item_id'] . " AND ai.reservation_id ='".$row['reservation_id']."'";
-                                                    //print_r($sql_addon_item_list);
-                                                    $result_addon_item_list = $db->query($sql_addon_item_list);
-                                                    $row_addon_item_list = $result_addon_item_list->fetch_assoc();
-                                                    ?>
-                                                    <tr>
-                                                        <td><?= $row_addon_item_list['item_name'] ?></td>
-                                                        <td><?= $row_addon_item_list['portion_qty'] ?></td>
-                                                    </tr>
-                                                    <?php
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <?php
-                            }
-                            ?>
-                            <?php
-                            $sql_addon_services = "SELECT * FROM reservation_addon_service WHERE reservation_id='".$row['reservation_id']."'";
-                            //print_r($sql_addon_items);
-                            $result_addon_services = $db->query($sql_addon_services);
-                            if ($result_addon_services->num_rows > 0) {
-                                ?>
-                                <div class="col-md-6">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-light table-bordered" style="font-size:13px;">
-                                            <thead style="text-align:center;">
-                                                <tr>
-                                                    <th colspan="2">Selected Add-on Services</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>Service</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody style="text-align:left;">
-                                                <?php
-                                                while ($row_addon_services = $result_addon_services->fetch_assoc()) {
-                                                    //var_dump($row_addon_services);
-                                                    $sql_addon_services_list = "SELECT s.service_name FROM service s "
-                                                            . "LEFT JOIN reservation_addon_service sa ON sa.service_id=s.service_id "
-                                                            . "WHERE sa.service_id=" . $row_addon_services['service_id'] . " "
-                                                            . "AND sa.reservation_id ='".$row['reservation_id']."'";
-                                                    //print_r($sql_addon_services_list);
-                                                    $result_addon_services_list = $db->query($sql_addon_services_list);
-                                                    $row_addon_services_list = $result_addon_services_list->fetch_assoc();
-                                                    ?>
-                                                    <tr>
-                                                        <td><?= $row_addon_services_list['service_name'] ?></td>
-                                                    </tr>
-                                                    <?php
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <?php
-                            }
-                            ?>
                         </div>
                     </div>
                 </div>

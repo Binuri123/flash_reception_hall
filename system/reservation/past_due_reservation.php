@@ -1,4 +1,4 @@
-<?php
+<?php 
 include '../header.php';
 include '../menu.php';
 ?>
@@ -6,24 +6,19 @@ include '../menu.php';
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
     <div class="mt-3 pagetitle">
         <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
-            <h1 class="h4 m-0">Held Reservations</h1>
+            <h1 class="h4 m-0">Past Due Reservations</h1>
         </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>reservation/reservation.php">Reservations</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Held</li>
+                <li class="breadcrumb-item active" aria-current="page">Past Due</li>
             </ol>
         </nav>
     </div>
     <?php
     extract($_POST);
     //var_dump($_POST);
-    if ($_SERVER['REQUEST_METHOD'] == "POST" && @$action == 'complete') {
-        $db=  dbConn();
-        $sql = "UPDATE reservation SET reservation_status_id='5' WHERE reservation_no='$reservation_no'";
-        $db->query($sql);
-    }
     $where = NULL;
     //echo 'outside';
     if ($_SERVER['REQUEST_METHOD'] == "POST" && @$action == 'search') {
@@ -39,28 +34,28 @@ include '../menu.php';
             //Wild card serach perform using like and %% signs
             $where .= " r.customer_no LIKE '%$customer_no%' AND";
         }
-
+        
         if (!empty($reservation_no)) {
             //Wild card serach perform using like and %% signs
             $where .= " r.reservation_no LIKE '%$reservation_no%' AND";
         }
-
+        
         if (!empty($min_date) && !empty($max_date)) {
             $where .= " r.event_date BETWEEN '$min_date' AND '$max_date' AND";
-        } elseif (!empty($min_date) && empty($max_date)) {
+        }elseif(!empty($min_date) && empty($max_date)){
             $where .= " r.event_date = '$min_date' AND";
-        } elseif (empty($min_date) && !empty($max_date)) {
+        }elseif(empty($min_date) && !empty($max_date)){
             $where .= " r.event_date = '$max_date' AND";
         }
-
+        
         if (!empty($min_price) && !empty($max_price)) {
             $where .= " r.discounted_price BETWEEN '$min_price' AND '$max_price' AND";
-        } elseif (!empty($min_price) && empty($max_price)) {
+        }elseif(!empty($min_price) && empty($max_price)){
             $where .= " r.discounted_price >= '$min_price' AND";
-        } elseif (empty($min_price) && !empty($max_price)) {
+        }elseif(empty($min_price) && !empty($max_price)){
             $where .= " r.discounted_price <= '$max_price' AND";
         }
-
+        
         if (!empty($where)) {
             $where = substr($where, 0, -3);
             $where = " AND $where";
@@ -112,7 +107,8 @@ include '../menu.php';
                             <th scope="col">Event Date</th>
                             <th scope="col">Event Time</th>
                             <th scope="col">Event</th>
-                            <th scope="col">Reservation Price(Rs.)</th>
+                            <th scope="col">Reservation Price (Rs.)</th>
+                            <th scope="col"></th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -120,8 +116,9 @@ include '../menu.php';
                         <?php
                         $cDate = date('Y-m-d');
                         $sql = "SELECT * FROM reservation r LEFT JOIN event e ON e.event_id=r.event_id "
-                                . " WHERE r.event_date <='$cDate' AND r.reservation_payment_status_id= '3' AND r.reservation_status_id='2' "
-                                . "$where ORDER BY r.add_date DESC";
+                                . "WHERE (r.reservation_status_id != 3 OR r.reservation_status_id != 4 "
+                                . "OR r.reservation_status_id != 5)"
+                                . " AND r.event_date < '$cDate' $where ORDER BY r.add_date DESC";
                         //print_r($sql);
                         $db = dbConn();
                         $result = $db->query($sql);
@@ -136,19 +133,13 @@ include '../menu.php';
                                     <td><?= $row['event_date'] ?></td>
                                     <td><?= $row['start_time'] . " - " . $row['end_time'] ?></td>
                                     <td><?= $row['event_name'] ?></td>
-                                    <td><?= number_format($row['discounted_price'], '2', '.', ',') ?></td>
-                                    <?php
-                                    if ($_SESSION['user_role_id'] != '4' || $_SESSION['user_role_id'] != '5' || $_SESSION['user_role_id'] != '7' || $_SESSION['user_role_id'] != '8') {
-                                        ?>
-                                        <td style="text-align:center;">
-                                            <form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>">
-                                                <input type="hidden" name="reservation_no" value="<?=$row['reservation_no']?>">
-                                                <button type="submit" name="action" value="complete" class="btn btn-success btn-sm">Complete</button>
-                                            </form>
-                                        </td>
-                                        <?php
-                                    }
-                                    ?>
+                                    <td><?= number_format($row['discounted_price'],'2','.',',') ?></td>
+                                    <td style="text-align:center;">
+                                        <a href="<?= SYSTEM_PATH ?>reservation/cancel.php?reservation_no=<?= $row['reservation_no'] ?>" class="btn btn-warning btn-sm">Cancel</a>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <a href="<?= SYSTEM_PATH ?>reservation/view.php?reservation_no=<?= $row['reservation_no'] ?>" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+                                    </td>
                                 </tr>
                                 <?php
                                 $i++;

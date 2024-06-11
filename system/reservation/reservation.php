@@ -2,7 +2,7 @@
 <?php include '../menu.php'; ?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="mt-4 pagetitle">
+    <div class="mt-3 pagetitle">
         <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
             <h1 class="h4 m-0">Reservations</h1>
         </div>
@@ -64,6 +64,28 @@
                 </a>
             </div>
             <div class="col-md-3">
+                <a href="<?= SYSTEM_PATH ?>reservation/past_due_reservation.php" style="text-decoration:none;color:white">
+                    <div class="card bg-danger text-danger" style="--bs-bg-opacity: .1;">
+                        <div class="card-body text-center">
+                            <?php
+                            $db = dbConn();
+                            $cDate = date('Y-m-d');
+                            $sql = "SELECT count(*) as past_due_count FROM reservation "
+                                    . "WHERE (reservation_status_id=1 OR reservation_status_id=2) "
+                                    . "AND event_date<'".$cDate."'";
+                            //var_dump($sql);
+                            $result = $db->query($sql);
+                            $row = $result->fetch_assoc();
+                            $past_due_count = $row['past_due_count'];
+                            ?>
+                            <h4># Past Due<br><?= $past_due_count ?></h4>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-3">
                 <a href="<?= SYSTEM_PATH ?>reservation/canceled_reservation.php" style="text-decoration:none;color:white">
                     <div class="card bg-danger text-danger" style="--bs-bg-opacity: .1;">
                         <div class="card-body text-center">
@@ -79,11 +101,9 @@
                     </div>
                 </a>
             </div>
-        </div>
-        <div class="row mb-3">
             <div class="col-md-3">
                 <a href="<?= SYSTEM_PATH ?>reservation/rejected_reservation.php" style="text-decoration:none;color:white">
-                    <div class="card bg-primary text-primary" style="--bs-bg-opacity: .1;">
+                    <div class="card bg-success text-success" style="--bs-bg-opacity: .1;">
                         <div class="card-body text-center">
                             <?php
                             $db = dbConn();
@@ -99,7 +119,7 @@
             </div>
             <div class="col-md-3">
                 <a href="<?= SYSTEM_PATH ?>reservation/refunded_reservation.php" style="text-decoration:none;color:white">
-                    <div class="card bg-secondary text-secondary" style="--bs-bg-opacity: .1;">
+                    <div class="card bg-info text-info" style="--bs-bg-opacity: .1;">
                         <div class="card-body text-center">
                             <?php
                             $db = dbConn();
@@ -115,7 +135,7 @@
             </div>
             <div class="col-md-3">
                 <a href="<?= SYSTEM_PATH ?>reservation/held_reservations.php" style="text-decoration:none;color:white">
-                    <div class="card bg-light text-dark" style="--bs-bg-opacity: .1;">
+                    <div class="card bg-warning text-warning" style="--bs-bg-opacity: .1;">
                         <div class="card-body text-center">
                             <?php
                             $db = dbConn();
