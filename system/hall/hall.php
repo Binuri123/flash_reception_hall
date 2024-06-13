@@ -4,24 +4,27 @@ include '../menu.php';
 ?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="mt-3 pagetitle">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="h4 m-0">Halls</h1>
+            <?php
+            if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '3') {
+            ?>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>hall/add.php"><span data-feather="plus-circle" class="align-text-bottom"></span>New Hall</a>
+                    </div>
+                </div>
+            <?php
+            }
+            ?>
+        </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Hall</li>
             </ol>
         </nav>
-        <?php
-        if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '3') {
-            ?>
-            <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group me-2">
-                    <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>hall/add.php"><span data-feather="plus-circle" class="align-text-bottom"></span>New Hall</a>
-                </div>
-            </div>
-            <?php
-        }
-        ?>
     </div>
     <?php
     $where = NULL;
@@ -55,34 +58,27 @@ include '../menu.php';
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-            <h3>Halls</h3>
-        </div>
-        <div class="col-md-1"></div>
-    </div>
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
             <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
-                <div class="row">
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Name" name="hall_name" value="<?= @$hall_name ?>" style="font-size:13px;">
+                <div class="row mb-3 align-items-end">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Name" name="hall_name" value="<?= @$hall_name ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Min" name="min_cap" value="<?= @$min_cap ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Min" name="min_cap" value="<?= @$min_cap ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <input type="text" class="form-control" placeholder="Max" name="max_cap" value="<?= @$max_cap ?>" style="font-size:13px;">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Max" name="max_cap" value="<?= @$max_cap ?>" style="font-size:13px;font-style:italic;">
                     </div>
-                    <div class="mb-3 col-md-2">
-                        <select name="availability" class="form-control form-select" style="font-size:13px;">
+                    <div class="col">
+                        <select name="availability" class="form-control form-select" style="font-size:13px;font-style:italic;">
                             <option value="" style="text-align:center;">-Status-</option>
                             <option value="Available" <?php if (@$availability == 'Available') { ?> selected <?php } ?>>Available</option>
                             <option value="Unavailable" <?php if (@$availability == 'Unavailable') { ?> selected <?php } ?>>Unavailable</option>
                         </select>
                     </div>
-                    <div class="mb-3 col-md-4">
-                        <button type="submit" class="btn btn-warning" style="width:100px;font-size:13px;"><i class="bi bi-search"></i> Search</button>
-                        <a href="<?= SYSTEM_PATH ?>hall/hall.php" class="btn btn-info" style="width:100px;font-size:13px;"><i class="bi bi-eraser"></i> Clear</a>
+                    <div class="col d-flex">
+                        <button type="submit" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
+                        <a href="<?= SYSTEM_PATH ?>hall/hall.php" class="btn btn-info btn-sm flex-grow-1 ms-2" style="font-size:13px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
                     </div>
                 </div>
             </form>
@@ -99,8 +95,8 @@ include '../menu.php';
                 $db = dbConn();
                 $result = $db->query($sql);
                 ?>
-                <table class="table table-striped table-sm">
-                    <thead class="bg-secondary">
+                <table class="table modified table-striped table-sm" style="font-size:13px;">
+                    <thead class="bg-secondary text-white" style="font-size:13px;text-align:center;vertical-align:middle;">
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>

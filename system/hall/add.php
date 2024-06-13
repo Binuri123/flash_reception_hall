@@ -4,21 +4,22 @@ include '../header.php';
 include '../menu.php';
 ?>`
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>hall/hall.php">Hall</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Add</li>
-                </ol>
-            </nav>
-        </div>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-                <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>hall/hall.php"><i class="bi bi-calendar"></i> Search Hall</a>
+    <div class="mt-3 pagetitle">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="h4 m-0">Hall</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <a class="btn btn-sm btn-outline-success" href="<?= SYSTEM_PATH ?>hall/hall.php"><i class="bi bi-calendar"></i> Search Hall</a>
+                </div>
             </div>
         </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>hall/hall.php">Hall</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Add</li>
+            </ol>
+        </nav>
     </div>
     <?php
     //extract the array
@@ -113,29 +114,29 @@ include '../menu.php';
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="mb-3 col-md-4">
-                                        <label for="hall_name" class="form-label"><span class="text-danger">*</span> Hall Name</label>
+                                        <label for="hall_name" class="form-label" style="font-size:13px;"><span class="text-danger">*</span> Hall Name</label>
                                     </div>
                                     <div class="mb-3 col-md-8">
-                                        <input type="text" class="form-control" id="hall_name" name="hall_name" value="<?= @$hall_name ?>">
-                                        <div class="text-danger"><?= @$message["error_hall_name"] ?></div>
+                                        <input style="font-size:13px;" type="text" class="form-control" id="hall_name" name="hall_name" value="<?= @$hall_name ?>">
+                                        <div style="font-size:13px;" class="text-danger"><?= @$message["error_hall_name"] ?></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label class="form-label"><span class="text-danger">*</span> Availability</label><br>
+                                        <label style="font-size:13px;" class="form-label"><span class="text-danger">*</span> Availability</label><br>
                                     </div>
                                     <div class="col-md-8">
-                                        <div class="form-check form-check-inline">
+                                        <div class="form-check form-check-inline" style="font-size:13px;">
                                             <input class="form-check-input" type="radio" name="availability" id="hall_available" value="Available" <?php if (isset($availability) && $availability == 'Available') { ?> checked <?php } ?>>
                                             <label class="form-check-label" for="hall_available">Available</label>
                                         </div>
-                                        <div class="form-check form-check-inline">
+                                        <div class="form-check form-check-inline" style="font-size:13px;">
                                             <input class="form-check-input" type="radio" name="availability" id="hall_unavailable" value="Unavaiable" <?php if (isset($availability) && $availability == 'Unavailable') { ?> checked <?php } ?>>
                                             <label class="form-check-label" for="hall_unavailable">Unavailable</label>
                                         </div>
-                                        <div class="text-danger"><?= @$message["error_availability"] ?></div>
+                                        <div class="text-danger" style="font-size:13px;"><?= @$message["error_availability"] ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -144,22 +145,22 @@ include '../menu.php';
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="mb-3 col-md-4">
-                                        <label for="min_cap" class="form-label"><span class="text-danger">*</span> Min Capacity</label>
+                                        <label for="min_cap" class="form-label" style="font-size:13px;"><span class="text-danger">*</span> Min Capacity</label>
                                     </div>
                                     <div class="mb-3 col-md-8">
-                                        <input type="number" min="1" class="form-control" id="min_cap" name="min_cap" onchange="form.submit()" value="<?= @$min_cap ?>">
-                                        <div class="text-danger"><?= @$message["error_min_cap"] ?></div>
+                                        <input style="font-size:13px;" type="number" min="1" class="form-control" id="min_cap" name="min_cap" onchange="form.submit()" value="<?= @$min_cap ?>">
+                                        <div class="text-danger" style="font-size:13px;"><?= @$message["error_min_cap"] ?></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
-                                        <label for="max_cap" class="form-label"><span class="text-danger">*</span> Max Capacity</label>
+                                        <label for="max_cap" class="form-label" style="font-size:13px;"><span class="text-danger">*</span> Max Capacity</label>
                                     </div>
                                     <div class="col-md-8 mb-3">
-                                        <input type="number" min="<?= @$min_cap ?>" class="form-control" id="max_cap" name="max_cap" value="<?= @$max_cap ?>">
-                                        <div class="text-danger"><?= @$message["error_max_cap"] ?></div>
+                                        <input style="font-size:13px;" type="number" min="<?= @$min_cap ?>" class="form-control" id="max_cap" name="max_cap" value="<?= @$max_cap ?>">
+                                        <div class="text-danger" style="font-size:13px;"><?= @$message["error_max_cap"] ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -168,17 +169,17 @@ include '../menu.php';
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="mb-3 col-md-4">
-                                        <label for="facilities" class="form-label"><span class="text-danger">*</span> Facilities</label>
+                                        <label for="facilities" class="form-label"><span class="text-danger" style="font-size:13px;">*</span> Facilities</label>
                                     </div>
                                     <div class="mb-3 col-md-8">
-                                        <textarea class="form-control" id="facilities" name="facilities"><?= @$facilities ?></textarea>
+                                        <textarea class="form-control" id="facilities" name="facilities" style="font-size:13px;"><?= @$facilities ?></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
-                                        <label for="hall_image" class="form-label">Image</label>
+                                        <label for="hall_image" class="form-label" style="font-size:13px;">Image</label>
                                     </div>
                                     <div class="col-md-8 mb-3">
                                         <?php
@@ -190,8 +191,8 @@ include '../menu.php';
                                             $prev_image = 'noImage.png';
                                         }
                                         ?>
-                                        <input type="hidden" name="prev_image" value="<?= @$prev_image ?>">
-                                        <input type="file" name="hall_image" id="hall_image" class="form-control">
+                                        <input type="hidden" name="prev_image" value="<?= @$prev_image ?>" style="font-size:13px;">
+                                        <input type="file" name="hall_image" id="hall_image" class="form-control" style="font-size:13px;">
                                     </div>
                                 </div>
                             </div>
@@ -199,10 +200,10 @@ include '../menu.php';
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="row">
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-4 mb-3" style="font-size:13px;">
                                         <label for="events" class="form-label"><span class="text-danger">*</span> Allowed Events</label>
                                     </div>
-                                    <div class="col-md-8 mb-3">
+                                    <div class="col-md-8 mb-3" style="font-size:13px;">
                                         <?php
                                         $db = dbConn();
                                         $sql = "SELECT * FROM event";

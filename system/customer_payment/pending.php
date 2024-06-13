@@ -49,7 +49,7 @@ include '../menu.php';
                                 . "LEFT JOIN reservation_payment_status rps ON rps.payment_status_id = r.reservation_payment_status_id "
                                 . "LEFT JOIN customer_payments p ON p.reservation_no=r.reservation_no "
                                 . "LEFT JOIN payment_status ps ON ps.payment_status_id = p.payment_status "
-                                . "WHERE r.reservation_no NOT IN (SELECT reservation_no FROM customer_payments) "
+                                . "WHERE (r.reservation_no NOT IN (SELECT reservation_no FROM customer_payments) "
                                 . "OR (p.payment_category_id='1' AND p.payment_method_id='1' AND p.payment_status = '1') "
                                 . "OR (p.payment_category_id='1' AND p.payment_method_id='1' AND p.payment_status = '2') "
                                 . "OR (p.payment_category_id='1' AND p.payment_method_id='2' AND p.payment_status = '2') "
@@ -71,7 +71,9 @@ include '../menu.php';
                                 . "OR (p.payment_category_id='4' AND p.payment_method_id='1' AND p.payment_status = '1') "
                                 . "OR (p.payment_category_id='4' AND p.payment_method_id='1' AND p.payment_status = '3') "
                                 . "OR (p.payment_category_id='4' AND p.payment_method_id='2' AND p.payment_status = '3') "
-                                . "OR (p.payment_category_id='4' AND p.payment_method_id='3' AND p.payment_status = '3') ";
+                                . "OR (p.payment_category_id='4' AND p.payment_method_id='3' AND p.payment_status = '3'))"
+                                . "AND r.reservation_payment_status_id != 4 AND r.reservation_payment_status_id != 5 "
+                                . "AND r.reservation_payment_status_id != 7 ORDER BY r.add_date DESC";
                         //print_r($sql);
                         $result = $db->query($sql);
                         if ($result->num_rows > 0) {

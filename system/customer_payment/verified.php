@@ -40,7 +40,8 @@ include '../menu.php';
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "SELECT * FROM customer_payments cp WHERE cp.payment_status = '2' OR cp.payment_status = '4'";
+                        $sql = "SELECT * FROM customer_payments cp WHERE cp.payment_status = '2' "
+                                . "OR cp.payment_status = '4'";
                         //print_r($sql);
                         $db = dbConn();
                         $result = $db->query($sql);

@@ -120,7 +120,8 @@ include '../menu.php';
                         <?php
                         $cDate = date('Y-m-d');
                         $sql = "SELECT * FROM reservation r LEFT JOIN event e ON e.event_id=r.event_id "
-                                . " WHERE r.event_date <='$cDate' AND r.reservation_payment_status_id= '3' AND r.reservation_status_id='2' "
+                                . " WHERE r.event_date <='$cDate' AND r.reservation_payment_status_id= '3' "
+                                . "AND r.reservation_status_id='2' "
                                 . "$where ORDER BY r.add_date DESC";
                         //print_r($sql);
                         $db = dbConn();

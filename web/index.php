@@ -24,7 +24,7 @@ include 'header.php';
                     <!--<a href="#check_availability" class="btn-book-a-table">Check Availability</a>-->
                 </div>
             </div>
-            <div class="col-md-5 mt-3 mb-3" style="width:550px">
+            <div class="col-md-5 mt-3 mb-3">
                 <img src="<?= WEB_PATH ?>assets/img/flash/home_page_side.jpg" style="height:400px;border-radius:10px" class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="300">
             </div>
         </div>

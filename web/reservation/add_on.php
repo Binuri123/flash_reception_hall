@@ -174,7 +174,13 @@ include '../customer/sidebar.php';
                                                                 <tbody style="font-size:13px;">
                                                                     <?php
                                                                     $db = dbConn();
-                                                                    $sql = "SELECT c.category_id,c.category_name,i.item_id,i.item_name,ai.addon_price FROM menu_item i LEFT JOIN additional_allowed_item ai ON ai.item_id=i.item_id LEFT JOIN item_category c ON c.category_id=i.category_id WHERE i.addon_status = 'Yes' AND i.availability = 'Available' ORDER BY category_id ASC";
+                                                                    $selected_package = $_SESSION['reservation_details']['package_details']['package_id'];
+                                                                    $sql = "SELECT c.category_id,c.category_name,i.item_id,i.item_name,ai.addon_price FROM menu_item i "
+                                                                            . "LEFT JOIN additional_allowed_item ai ON ai.item_id=i.item_id "
+                                                                            . "LEFT JOIN item_category c ON c.category_id=i.category_id "
+                                                                            . "WHERE i.addon_status = 'Yes' AND i.availability = 'Available' AND ai.item_id NOT IN"
+                                                                            . "(SELECT item_id FROM menu_package_item WHERE menu_package_id="
+                                                                            . "(SELECT menu_package_id FROM package WHERE package_id=$selected_package)) ORDER BY category_id ASC";
                                                                     //print_r($sql);
                                                                     $result = $db->query($sql);
                                                                     $i = 1;

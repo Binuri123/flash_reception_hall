@@ -32,9 +32,13 @@ include '../assets/phpmail/mail.php';
             $cDate = date('Y-m-d');
             $user_id = $_SESSION['userid'];
             if ($verification == 'Verified') {
-                $sql = "UPDATE customer_payments SET payment_status = '2',verified_date='$cDate',verified_user='$user_id' WHERE payment_id = '$payment_id'";
+                if($payment_category == 3 || $payment_category == 4){
+                    $sql = "UPDATE customer_payments SET payment_status = '4',verification_status='Verified',verified_date='$cDate',verified_user='$user_id' WHERE payment_id = '$payment_id'";
+                }else{
+                    $sql = "UPDATE customer_payments SET payment_status = '2',verification_status='Verified',verified_date='$cDate',verified_user='$user_id' WHERE payment_id = '$payment_id'";
+                }
             } elseif ($verification == 'Unsuccessful') {
-                $sql = "UPDATE customer_payments SET payment_status = '3',verified_date='$cDate',verified_user='$user_id' WHERE payment_id = '$payment_id'";
+                $sql = "UPDATE customer_payments SET payment_status = '3',verification_status='Unsuccessfull',verified_date='$cDate',verified_user='$user_id' WHERE payment_id = '$payment_id'";
             }
             //print_r($sql);
             $db->query($sql);
@@ -68,9 +72,9 @@ include '../assets/phpmail/mail.php';
             $cDate = date('Y-m-d');
             $user_id = $_SESSION['userid'];
             if ($verification == 'Verified') {
-                $sql = "UPDATE customer_payments SET payment_status = '6',rejected_date='$cDate',rejected_user='$user_id' WHERE payment_id = '$payment_id'";
+                $sql = "UPDATE customer_payments SET payment_status = '6',verification_status='Verified',rejected_date='$cDate',rejected_user='$user_id' WHERE payment_id = '$payment_id'";
             } elseif ($verification == 'Unsuccessful') {
-                $sql = "UPDATE customer_payments SET payment_status = '3',verified_date='$cDate',verified_user='$user_id' WHERE payment_id = '$payment_id'";
+                $sql = "UPDATE customer_payments SET payment_status = '3',verification_status='Unsuccessful',verified_date='$cDate',verified_user='$user_id' WHERE payment_id = '$payment_id'";
             }
             //print_r($sql);
             $db->query($sql);
@@ -82,6 +86,13 @@ include '../assets/phpmail/mail.php';
             if ($verification == 'Verified') {
                 $sql = "UPDATE reservation SET reservation_payment_status_id = '7',reservation_status_id='4' WHERE reservation_no = '$reservation_no'";
             }
+            $db->query($sql);
+            
+            date_default_timezone_set('Asia/Colombo');
+            $cTime = date('H:i');
+            $cancel_reason = "Date is not available Anymore";
+            $sql = "INSERT INTO canceled_reservations(reservation_no,cancel_reason,canceled_date,cancel_time) "
+                    . "VALUES('$reservation_no','$cancel_reason','$cDate','$cTime')";
             $db->query($sql);
 
             $sql = "SELECT email,first_name,last_name FROM customer WHERE customer_no=(SELECT customer_no FROM customer_payments WHERE payment_id ='$payment_id')";

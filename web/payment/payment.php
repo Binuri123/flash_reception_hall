@@ -76,7 +76,8 @@ include '../customer/sidebar.php';
                         <div class="card-body mt-4" style="text-align:center;vertical-align:middle">
                             <?php
                             $db = dbConn();
-                            $sql = "SELECT COUNT(*) as unsuccessful_payments FROM customer_payments WHERE customer_no =(SELECT customer_no FROM customer WHERE customer_id=" . $_SESSION['customer_id'] . ") AND payment_status='3'";
+                            $sql = "SELECT COUNT(*) as unsuccessful_payments FROM customer_payments "
+                                    . "WHERE customer_no =(SELECT customer_no FROM customer WHERE customer_id=" . $_SESSION['customer_id'] . ") AND payment_status='3'";
                             //print_r($sql);
                             $result = $db->query($sql);
                             $row = $result->fetch_assoc();

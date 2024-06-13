@@ -183,12 +183,12 @@ include '../menu.php';
                             $sql = "SELECT * FROM customer_payments cp "
                                     . "LEFT JOIN payment_category pc ON pc.payment_category_id=cp.payment_category_id "
                                     . "LEFT JOIN payment_method pm ON pm.method_id = cp.payment_method_id "
-                                    . "WHERE cp.payment_status = '1' AND cp.payment_method_id != '1' $where";
+                                    . "WHERE cp.payment_status = '1' AND cp.payment_method_id != '1' $where ORDER BY cp.add_date DESC";
                         }elseif(hasAnyRole([1,2,6])){
                             $sql = "SELECT * FROM customer_payments cp "
                                     . "LEFT JOIN payment_category pc ON pc.payment_category_id=cp.payment_category_id "
                                     . "LEFT JOIN payment_method pm ON pm.method_id = cp.payment_method_id "
-                                    . "WHERE cp.payment_status = '1' $where";
+                                    . "WHERE cp.payment_status = '1' $where ORDER BY cp.add_date DESC";
                         }
                         //print_r($sql);
                         $db = dbConn();

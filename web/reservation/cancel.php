@@ -27,9 +27,11 @@ include '../customer/sidebar.php';
                 $cTime = date('H:i');
                 
                 if($cancel_reason != 'Other'){
-                    $sql = "INSERT INTO canceled_reservations(reservation_no,cancel_reason,canceled_date,cancel_time) VALUES('$reservation_no','$cancel_reason','$cDate','$cTime')";
+                    $sql = "INSERT INTO canceled_reservations(reservation_no,cancel_reason,canceled_date,cancel_time) "
+                            . "VALUES('$reservation_no','$cancel_reason','$cDate','$cTime')";
                 }else{
-                    $sql = "INSERT INTO canceled_reservations(reservation_no,cancel_reason,canceled_date,cancel_time,other_reason) VALUES('$reservation_no','$cancel_reason','$cDate','$cTime','$other_reason')";
+                    $sql = "INSERT INTO canceled_reservations(reservation_no,cancel_reason,canceled_date,cancel_time,other_reason) "
+                            . "VALUES('$reservation_no','$cancel_reason','$cDate','$cTime','$other_reason')";
                 }
                 print_r($sql);
                 $db->query($sql);

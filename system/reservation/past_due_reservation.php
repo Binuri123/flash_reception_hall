@@ -61,6 +61,23 @@ include '../menu.php';
             $where = " AND $where";
         }
     }
+    
+    if($_SERVER['REQUEST_METHOD'] == "POST" && @$action == 'cancel'){
+        $reservation_no = cleanInput($reservation_no);
+        
+        date_default_timezone_set('Asia/Colombo');
+        $cDate = date('Y-m-d');
+        $cTime = date('H:i');
+        $cancel_reason = "Date is not Available Anymore";
+        $db = dbConn();
+        $sql = "INSERT INTO canceled_reservations(reservation_no,cancel_reason,canceled_date,cancel_time) "
+             . "VALUES('$reservation_no','$cancel_reason','$cDate','$cTime')";
+        $db->query($sql);
+        
+        $sql = "UPDATE reservation SET reservation_status_id ='3',update_date ='$cDate' "
+             . "WHERE reservation_no = '$reservation_no'";
+        $db->query($sql);
+    }
     ?>
     <div class="row">
         <div class="col-md-12">
@@ -116,8 +133,8 @@ include '../menu.php';
                         <?php
                         $cDate = date('Y-m-d');
                         $sql = "SELECT * FROM reservation r LEFT JOIN event e ON e.event_id=r.event_id "
-                                . "WHERE (r.reservation_status_id != 3 OR r.reservation_status_id != 4 "
-                                . "OR r.reservation_status_id != 5)"
+                                . "WHERE (r.reservation_status_id != 3 AND r.reservation_status_id != 4 "
+                                . "AND r.reservation_status_id != 5)"
                                 . " AND r.event_date < '$cDate' $where ORDER BY r.add_date DESC";
                         //print_r($sql);
                         $db = dbConn();
@@ -135,7 +152,10 @@ include '../menu.php';
                                     <td><?= $row['event_name'] ?></td>
                                     <td><?= number_format($row['discounted_price'],'2','.',',') ?></td>
                                     <td style="text-align:center;">
-                                        <a href="<?= SYSTEM_PATH ?>reservation/cancel.php?reservation_no=<?= $row['reservation_no'] ?>" class="btn btn-warning btn-sm">Cancel</a>
+                                        <form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>">
+                                            <input type="hidden" name="reservation_no" value="<?=$row['reservation_no']?>">
+                                            <button type="submit" name="action" value="cancel" class="btn btn-warning btn-sm">Cancel</button>
+                                        </form>
                                     </td>
                                     <td style="text-align:center;">
                                         <a href="<?= SYSTEM_PATH ?>reservation/view.php?reservation_no=<?= $row['reservation_no'] ?>" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>

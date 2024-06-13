@@ -56,7 +56,6 @@ include '../menu.php';
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
                                         <tr>
                                             <td>Supplier No</td>
                                             <td><?= $row['supplier_no'] ?></td>

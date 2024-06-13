@@ -143,16 +143,16 @@ include '../customer/sidebar.php';
                     <table class="table table-striped bg-light" style="font-size:13px;text-align:center;">
                         <thead style="font-size:13px;text-align:center;vertical-align:middle;font-family:Times New Roman" class="bg-secondary text-white">
                             <tr style="vertical-align:middle">
-                                <th>#</th>
-                                <th>Reservation<br>No</th>
-                                <th>Event<br>Date</th>
-                                <th>Event<br>Time</th>
-                                <th>Reservation<br>Status</th>
-                                <th style="text-align:left;">Canceled<br>Reason</th>
-                                <th>Final<br>Amount (Rs.)</th>
-                                <th>Paid<br>Amount (Rs.)</th>
-                                <th></th>
-                                <th></th>
+                                <th scope="col">#</th>
+                                <th scope="col">Reservation<br>No</th>
+                                <th scope="col">Event<br>Date</th>
+                                <th scope="col">Event<br>Time</th>
+                                <th scope="col">Reservation<br>Status</th>
+                                <th scope="col">Canceled Reason</th>
+                                <th scope="col">Final<br>Amount (Rs.)</th>
+                                <th scope="col">Paid<br>Amount (Rs.)</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -163,8 +163,8 @@ include '../customer/sidebar.php';
                                     . "LEFT JOIN reservation_status rs ON r.reservation_status_id=rs.reservation_status_id "
                                     . "LEFT JOIN reservation_payment_status rps ON rps.payment_status_id=r.reservation_payment_status_id "
                                     . "WHERE customer_no=(SELECT customer_no FROM customer WHERE customer_id=" . $_SESSION['customer_id'] . ") "
-                                    . "AND r.reservation_status_id='3' "
-                                    . "AND r.reservation_no NOT IN (SELECT reservation_no FROM refund_request) $where";
+                                    . "AND r.reservation_status_id='3' $where"; 
+                                    //. "AND r.reservation_no NOT IN (SELECT reservation_no FROM refund_request) $where";
                             //print_r($sql);
                             $result = $db->query($sql);
                             if ($result->num_rows > 0) {
@@ -185,7 +185,8 @@ include '../customer/sidebar.php';
                                         <td style="text-align:left;"><?= $row_cancel_reason['cancel_reason'] ?></td>
                                         <td style="text-align:right;"><?= number_format($row['discounted_price'],'2','.',',') ?></td>
                                         <?php
-                                        $sql_paid_amount = "SELECT SUM(paid_amount) as total_paid FROM customer_payments WHERE reservation_no ='" . $row['reservation_no'] . "' AND payment_status = '2'";
+                                        $sql_paid_amount = "SELECT SUM(paid_amount) as total_paid FROM customer_payments "
+                                                         . "WHERE reservation_no ='" . $row['reservation_no']."'";
                                         //print_r($sql_paid_amount);
                                         $result_paid_amount = $db->query($sql_paid_amount);
                                         $row_paid_amount = $result_paid_amount->fetch_assoc();
@@ -200,7 +201,8 @@ include '../customer/sidebar.php';
                                             <a href="<?= WEB_PATH ?>reservation/view.php?reservation_id=<?= $row['reservation_id'] ?>" class="btn btn-info btn-sm" style="text-align:center;vertical-align:middle;margin:0;padding:2px 5px;"><i class="bi bi-eye-fill"></i></a>
                                         </td>
                                         <?php
-                                        $sql_paid = "SELECT COUNT(*) as payments FROM customer_payments WHERE reservation_no ='" . $row['reservation_no'] . "' AND payment_status = '2'";
+                                        $sql_paid = "SELECT COUNT(*) as payments FROM customer_payments "
+                                                . "WHERE reservation_no ='" . $row['reservation_no'] . "' AND payment_status = '2'";
                                         $result_paid = $db->query($sql_paid);
                                         $row_paid = $result_paid->fetch_assoc();
                                         if ($row_paid['payments'] > 0) {

@@ -32,11 +32,6 @@ include '../menu.php';
                 <div class="card bg-light">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-12 mt-1 mb-1" style="text-align:center;">
-                                <h4>Reservation Details</h4>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-5 mt-3 mb-3" style="text-align:center;">
                                 <div class="table-responsive">
@@ -109,100 +104,9 @@ include '../menu.php';
                                 </div>
                             </div>
                             <div class="col-md-5 mt-3 mb-3" style="text-align:center;">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-light table-bordered" style="font-size:13px;">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="2">Invoice Details</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody style="text-align:left;">
-                                            <tr>
-                                                <td>Total Package Price (Rs.)</td>
-                                                <?php
-                                                $total_package_price = number_format($row['total_package_price'], '2', '.', ',');
-                                                ?>
-                                                <td><?= $total_package_price ?></td>
-                                            </tr>
-                                            <?php
-                                            $sql_addon_items = "SELECT * FROM reservation_addon_items WHERE reservation_id='".$row['reservation_id']."'";
-                                            $result_addon_items = $db->query($sql_addon_items);
-                                            if ($result_addon_items->num_rows > 0) {
-                                                ?>
-                                                <tr>
-                                                    <td>Price of Add-on Items (Rs.)</td>
-                                                    <?php
-                                                    $addon_price = number_format($row['addon_item_price'], '2', '.', ',');
-                                                    ?>
-                                                    <td><?= $addon_price ?></td>
-                                                </tr>
-                                                <?php
-                                            }
-                                            ?>
-                                            <?php
-                                            $sql_addon_services = "SELECT * FROM reservation_addon_service WHERE reservation_id='".$row['reservation_id']."'";
-                                            $result_addon_services = $db->query($sql_addon_services);
-                                            if ($result_addon_services->num_rows > 0) {
-                                                ?>
-                                                <tr>
-                                                    <td>Price of Add-on Services (Rs.)</td>
-                                                    <?php
-                                                    $service_price = number_format($row['addon_service_price'], '2', '.', ',');
-                                                    ?>
-                                                    <td><?= $service_price ?></td>
-                                                </tr>
-                                                <?php
-                                            }
-                                            ?>
-                                            <tr>
-                                                <td>Total Amount for the Reservation (Rs.)</td>
-                                                <?php
-                                                $total_price = number_format($row['total_amount'], '2', '.', ',');
-                                                ?>
-                                                <td><?= $total_price ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Tax (%)</td>
-                                                <?php
-                                                $tax = number_format($row['tax_rate'], '2');
-                                                ?>
-                                                <td><?= $tax ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Price After Tax (Rs.)</td>
-                                                <?php
-                                                $taxed_price = number_format($row['taxed_price'], '2', '.', ',');
-                                                ?>
-                                                <td><?= $taxed_price ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Discount (%)</td>
-                                                <?php
-                                                $discount = number_format($row['discount_rate'], '2');
-                                                ?>
-                                                <td><?= $discount ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Discounted Price (Rs.)</td>
-                                                <?php
-                                                $discounted_price = number_format($row['discounted_price'], '2', '.', ',');
-                                                ?>
-                                                <td><?= $discounted_price ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Reservation Payment Status</td>
-                                                <?php
-                                                $sql_res_status = "SELECT payment_status FROM reservation_payment_status WHERE payment_status_id=" . $row['reservation_payment_status_id'];
-                                                $result_res_status = $db->query($sql_res_status);
-                                                $row_res_status = $result_res_status->fetch_assoc();
-                                                ?>
-                                                <td><?= $row_res_status['payment_status'] ?></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                
                             </div>
-                            <div class="col-md-2"></div>
+                            <div class="col-md-1"></div>
                         </div>
                     </div>
                 </div>

@@ -127,7 +127,8 @@ include '../customer/sidebar.php';
                                     . "LEFT JOIN payment_category pc ON pc.payment_category_id=p.payment_category_id "
                                     . "LEFT JOIN payment_method pm ON pm.method_id=p.payment_method_id "
                                     . "LEFT JOIN payment_status ps ON ps.payment_status_id=p.payment_status "
-                                    . "WHERE p.customer_no=(SELECT customer_no FROM customer WHERE customer_id=" . $_SESSION['customer_id'] . ") AND p.payment_status='2' $where";
+                                    . "WHERE p.customer_no=(SELECT customer_no FROM customer WHERE customer_id=" . $_SESSION['customer_id'] . ") "
+                                    . "AND p.payment_status='2' OR p.payment_status='4' $where";
                             //print_r($sql);
                             $result = $db->query($sql);
                             if ($result->num_rows > 0) {

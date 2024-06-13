@@ -3,7 +3,7 @@ include '../header.php';
 include '../menu.php';
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="mt-4 pagetitle">
+    <div class="mt-3 pagetitle">
         <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
             <h1 class="h4 m-0">Suppliers</h1>
             <?php
