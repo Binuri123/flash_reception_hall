@@ -235,7 +235,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <table class="table modified table-striped table-sm">
+                            <table class="table modified table-striped table-sm" style="font-size:13px;">
                                 <thead class="bg-secondary text-white" style="font-size:13px;vertical-align: middle;text-align:center;">
                                     <tr>
                                         <th scope="col">#</th>

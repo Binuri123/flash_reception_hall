@@ -88,10 +88,10 @@ include '../menu.php';
                             <th scope="col">Reservation No</th>
                             <th scope="col">Event Date</th>
                             <th scope="col">Hall</th>
+                            <th scope="col"></th>
                             <?php
                             if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '3' || $_SESSION['user_role_id'] == '6' || $_SESSION['user_role_id'] == '9') {
                                 ?>
-                            <th scope="col"></th>
                             <th scope="col"></th>
                                 <?php
                             }
@@ -117,14 +117,7 @@ include '../menu.php';
                                     <td><?= $row['reservation_no'] ?></td>
                                     <td><?= $row['event_date'] ?></td>
                                     <td><?= $row['hall_name'] ?></td>
-                                    <?php
-                                    if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '3' || $_SESSION['user_role_id'] == '6' || $_SESSION['user_role_id'] == '9') {
-                                        ?>
-                                        <td><a href="<?= SYSTEM_PATH ?>arrangement_plan/re_assign.php?arr_plan_id=<?= $row['arrangement_plan_id'] ?>" class="btn btn-warning btn-sm"><i class="bi bi-list-ul"></i></a></td>
-                                        <?php
-                                    }
-                                    ?>
-                                        <td><a href="<?= SYSTEM_PATH ?>arrangement_plan/view.php?arr_plan_id=<?= $row['arrangement_plan_id'] ?>" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a></td>
+                                    <td><a href="<?= SYSTEM_PATH ?>arrangement_plan/view.php?arr_plan_id=<?= $row['arrangement_plan_id'] ?>" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a></td>
                                 </tr>
                                 <?php
                                 $i++;

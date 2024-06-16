@@ -3,20 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp64/www/flash_reception_hall/web/arrangement_plan/confirmation.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/arrangement_plan/completed.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/arrangement_plan/arr_reassign_success.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/arrangement_plan/re_assign.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/web/arrangement_plan/arrangement_request.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/arrangement_plan/arr_assign_success.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/arrangement_plan/in_progress.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/supplier/add_success.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/arrangement_plan/requests.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/arrangement_plan/assign.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/arrangement_plan/arrangement_plan.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/supplier/view.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/arrangement_plan/arr_complete_success.php</file>
-            <file>file:/C:/wamp64/www/flash_reception_hall/system/supplier/edit_success.php</file>
+            <file>file:/C:/wamp64/www/flash_reception_hall/system/customer_payment/received.php</file>
+            <file>file:/C:/wamp64/www/flash_reception_hall/system/customer_payment/verified.php</file>
         </group>
     </open-files>
 </project-private>

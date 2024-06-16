@@ -20,56 +20,59 @@ include '../menu.php';
     <?php
     if ($_SERVER['REQUEST_METHOD'] == "GET") {
         extract($_GET);
+        /*$db = dbConn();
+        $sql_con_count = "SELECT count(*) as services FROM arr_assign_supplier "
+                        . "WHERE arr_plan_id='$arr_plan_id' AND assign_status_id='2'";
+        $result_con_count = $db->query($sql_con_count);
+        $row_con_count = $result_con_count->fetch_assoc();
+        $x = $row_con_count['services'];
+        
+        $sql_all_count = "SELECT COUNT(DISTINCT service_id) as services "
+                . "FROM `arr_assign_supplier` WHERE arr_plan_id='$arr_plan_id'";
+        $result_all_count = $db->query($sql_all_count);
+        $row_all_count = $result_all_count->fetch_assoc();
+        $y = $row_all_count['services'];*/
     }
-    
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-        extract($_POST);
-    }
-    //Get the Arrangement Plan Details
+    ?>
+    <?php
+    extract($_POST);
     $db = dbConn();
     $sql = "SELECT * FROM arrangement_plan WHERE arrangement_plan_id = '$arr_plan_id'";
     $result = $db->query($sql);
     $row = $result->fetch_assoc();
-    
-    //Get the Reservation Details
+
     $sql_res = "SELECT * FROM reservation WHERE reservation_no = "
             . "(SELECT reservation_no FROM arrangement_plan WHERE arrangement_plan_id = '$arr_plan_id')";
     $result_res = $db->query($sql_res);
     $row_res = $result_res->fetch_assoc();
 
     //Get Services on Package
-    $sql_package_services = "SELECT service_id FROM package_services "
-            . "WHERE package_id='" . $row_res['package_id'] . "'";
+    $sql_package_services = "SELECT service_id FROM package_services WHERE package_id='" . $row_res['package_id'] . "'";
     $result_package_services = $db->query($sql_package_services);
     $services_package = array();
     while ($row_package_services = $result_package_services->fetch_assoc()) {
         $services_package[] = $row_package_services['service_id'];
     }
 
-    //Get Services on Requested as Add-on
-    $sql_addon_services = "SELECT service_id FROM reservation_addon_service "
-            . "WHERE reservation_id='" . $row_res['reservation_id'] . "'";
+//Get Services on Requested as Add-on
+    $sql_addon_services = "SELECT service_id FROM reservation_addon_service WHERE reservation_id='" . $row_res['reservation_id'] . "'";
     $result_addon_services = $db->query($sql_addon_services);
     $services_addon = array();
     while ($row_addon_services = $result_addon_services->fetch_assoc()) {
         $services_addon[] = $row_addon_services['service_id'];
     }
     
-    //Get Confirmed Services Count
-    $sql_con_count = "SELECT count(*) as services FROM arr_assign_supplier "
-            . "WHERE arr_plan_id='$arr_plan_id' AND assign_status_id='2'";
+    $sql_con_count = "SELECT count(*) as services FROM arr_assign_supplier WHERE arr_plan_id='$arr_plan_id' AND assign_status_id='2'";
     $result_con_count = $db->query($sql_con_count);
     $row_con_count = $result_con_count->fetch_assoc();
     $x = $row_con_count['services'];
 
-    //Get All Requested Services Count
-    $sql_all_count = "SELECT COUNT(DISTINCT service_id) as services FROM `arr_assign_supplier` "
-            . "WHERE arr_plan_id='$arr_plan_id'";
+    $sql_all_count = "SELECT COUNT(DISTINCT service_id) as services FROM `arr_assign_supplier` WHERE arr_plan_id='$arr_plan_id'";
     $result_all_count = $db->query($sql_all_count);
     $row_all_count = $result_all_count->fetch_assoc();
     $y = $row_all_count['services'];
 
-    //Get Rejected Services
+    //Get Out-sourcced Services
     $sql_reject = "SELECT service_id FROM arr_assign_supplier "
     . "WHERE arr_plan_id='$arr_plan_id' AND assign_status_id='3' "
     . "AND arr_assign_supplier_id IN (SELECT arr_assign_supplier_id "
@@ -80,7 +83,6 @@ include '../menu.php';
         $services_reject[] = $row_reject['service_id'];
     }
 
-    //Get Confirmed Services
     $sql_confirmed = "SELECT service_id FROM arr_assign_supplier WHERE arr_plan_id='$arr_plan_id' "
             . "AND assign_status_id='2'";
     $result_confirmed = $db->query($sql_confirmed);
@@ -88,24 +90,13 @@ include '../menu.php';
     while ($row_confirmed = $result_confirmed->fetch_assoc()) {
         $services_confirmed[] = $row_confirmed['service_id'];
     }
-/*echo 'get';
-var_dump($_GET);
-echo 'package';
-var_dump($services_package);
-echo 'addon';
-var_dump($services_addon);
-echo 'confirmed';
-var_dump($services_confirmed);
-echo 'rejected';
-var_dump($services_reject);
-echo 'con count';
-var_dump($x);
-echo 'all count';
-var_dump($y);
-//echo 'out';
-//var_dump($services_out);
-echo 'post';
-var_dump($_POST);*/
+//    echo 'package';
+//    var_dump($services_package);
+//    echo 'addon';
+//    var_dump($services_addon);
+//    echo 'out';
+//    var_dump($services_out);
+//    var_dump($_POST);
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && @$action == 'complete') {
         $db = dbConn();
         $cDate = date('Y-m-d');
@@ -434,7 +425,7 @@ var_dump($_POST);*/
     }
     ?>
     <div class="row">
-        <div class="col-md-1"></div>
+        <div class="col-md-2"></div>
         <div class="col-md-10">
             <div class="card bg-light" style="font-size:13px;">
                 <div class="card-header">
@@ -861,15 +852,13 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="dj_supplier">DJ Music</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('2',$services_reject)){
-                                                ?>
                                                 <select name="dj_supplier" id="dj_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
                                                     $db = dbConn();
                                                     $sql_supplier = "SELECT supplier_id,company_name FROM supplier "
-                                                            . "WHERE supplier_id IN (SELECT supplier_id FROM supplier_service "
+                                                            . "WHERE supplier_id IN "
+                                                            . "(SELECT supplier_id FROM supplier_service "
                                                             . "WHERE service_id='2') AND supplier_id "
                                                             . "NOT IN (SELECT supplier_id FROM arr_assign_supplier "
                                                             . "WHERE assign_status_id='3' AND arr_plan_id='$arr_plan_id' AND service_id='2')";
@@ -885,20 +874,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_dj_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('2',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
+                                                if (!empty($dj_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
+                                                    ?>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('2', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="dj_supplier">DJ Music</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
                                                         . "WHERE supplier_id IN "
                                                         . "(SELECT supplier_id FROM arr_assign_supplier "
                                                         . "WHERE arr_plan_id = '$arr_plan_id' "
                                                         . "AND service_id='2' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
                                                 ?>
-                                                    <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
-                                                }
-                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -914,9 +925,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="band_supplier">Band Group</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('3',$services_reject)){
-                                                    ?>
                                                 <select name="band_supplier" id="band_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -939,20 +947,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_band_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('3',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='3' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($band_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('3', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="band_supplier">Band Group</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='3' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -968,9 +998,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="tra_dance_supplier">Traditional Dancing Group</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('4',$services_reject)){
-                                                ?>
                                                 <select name="tra_dance_supplier" id="tra_dance_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -992,12 +1019,6 @@ var_dump($_POST);*/
                                                     ?>
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_tra_dance_supplier"] ?></div>
-                                                <?php
-                                                }elseif(in_array('4',$services_confirmed)){
-                                                    ?>
-                                                <?php
-                                                }
-                                                ?>
                                                 <?php
                                                 if (!empty($tra_dance_supplier)) {
                                                     $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
@@ -1050,9 +1071,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="hall_deco_supplier">Hall and Arch Decorations</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('5',$services_reject)){
-                                                    ?>
                                                 <select name="hall_deco_supplier" id="hall_deco_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1075,20 +1093,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_hall_deco_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('5',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='5' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
-                                                  ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                if (!empty($hall_deco_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
+                                                    ?>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('5', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="hall_deco_supplier">Hall and Arch Decorations</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='5' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1104,9 +1144,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="fresh_flo_supplier">Fresh Flowers</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('8',$services_reject)){
-                                                    ?>
                                                 <select name="fresh_flo_supplier" id="fresh_flo_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1129,20 +1166,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_fresh_flo_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('8',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='8' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($fresh_flo_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('8', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="fresh_flo_supplier">Fresh Flowers</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='8' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1158,14 +1217,12 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="poruwa_supplier">Poruwa</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('9',$services_reject)){
-                                                ?>
                                                 <select name="poruwa_supplier" id="poruwa_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
                                                     $db = dbConn();
-                                                    $sql_supplier = "SELECT supplier_id,company_name FROM supplier WHERE supplier_id IN "
+                                                    $sql_supplier = "SELECT supplier_id,company_name FROM supplier "
+                                                            . "WHERE supplier_id IN "
                                                             . "(SELECT supplier_id FROM supplier_service "
                                                             . "WHERE service_id='9') AND supplier_id "
                                                             . "NOT IN (SELECT supplier_id FROM arr_assign_supplier "
@@ -1182,20 +1239,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_poruwa_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('9',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
+                                                if (!empty($poruwa_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
+                                                    ?>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('9', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="poruwa_supplier">Poruwa</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
                                                         . "WHERE supplier_id IN "
                                                         . "(SELECT supplier_id FROM arr_assign_supplier "
                                                         . "WHERE arr_plan_id = '$arr_plan_id' "
                                                         . "AND service_id='9' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
                                                 ?>
                                                 <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
-                                                }
-                                                ?>
                                             </div>
                                         </div>
                                     </div>
@@ -1211,9 +1290,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="astaka_6_supplier">Ashtaka Group of 6</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('10',$services_reject)){
-                                                    ?>
                                                 <select name="astaka_6_supplier" id="astaka_6_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1236,20 +1312,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_astaka_6_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('10',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='10' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($astaka_6_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('10', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="astaka_6_supplier">Ashtaka Group of 6</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='10' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1265,9 +1363,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="astaka_8_supplier">Ashtaka Group of 8</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('11',$services_reject)){
-                                                    ?>
                                                 <select name="astaka_8_supplier" id="astaka_8_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1290,20 +1385,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_astaka_8_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('11',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='11' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($astaka_8_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('11', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="astaka_8_supplier">Ashtaka Group of 8</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='11' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1319,9 +1436,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="j_gatha_supplier">Jayamangala Gatha</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('12',$services_reject)){
-                                                ?>
                                                 <select name="j_gatha_supplier" id="j_gatha_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1344,20 +1458,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_j_gatha_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('12',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
+                                                if (!empty($j_gatha_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
+                                                    ?>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('12', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="j_gatha_supplier">Jayamangala Gatha</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
                                                         . "WHERE supplier_id IN "
                                                         . "(SELECT supplier_id FROM arr_assign_supplier "
                                                         . "WHERE arr_plan_id = '$arr_plan_id' "
                                                         . "AND service_id='12' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
                                                 ?>
                                                 <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
-                                                }
-                                                ?>
                                             </div>
                                         </div>
                                     </div>
@@ -1373,9 +1509,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="milk_fount_supplier">Milk Fountain</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('13',$services_reject)){
-                                                    ?>
                                                 <select name="milk_fount_supplier" id="milk_fount_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1398,20 +1531,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_milk_fount_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('13',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='13' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($milk_fount_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('13', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="milk_fount_supplier">Milk Fountain</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='13' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1427,9 +1582,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="wed_cake_supplier">Wedding Cake Structure</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('14',$services_reject)){
-                                                    ?>
                                                 <select name="wed_cake_supplier" id="wed_cake_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1452,20 +1604,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_wed_cake_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('14',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='14' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($wed_cake_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('14', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="wed_cake_supplier">Wedding Cake Structure</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='14' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1481,9 +1655,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="choc_fount_supplier">Chocolate Fountain</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('15',$services_reject)){
-                                                    ?>
                                                 <select name="choc_fount_supplier" id="choc_fount_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1506,20 +1677,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_choc_fount_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('15',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='15' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($choc_fount_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('15', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="choc_fount_supplier">Chocolate Fountain</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='15' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1535,9 +1728,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="oil_lamp_supplier">Oil Lamp</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('17',$services_reject)){
-                                                    ?>
                                                 <select name="oil_lamp_supplier" id="oil_lamp_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1560,20 +1750,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_oil_lamp_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('17',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='17' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($oil_lamp_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('17', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="oil_lamp_supplier">Oil Lamp</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='17' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1589,9 +1801,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="setteback_supplier">Setteback</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                    if(in_array('18',$services_reject)){
-                                                        ?>
                                                 <select name="setteback_supplier" id="setteback_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1614,20 +1823,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_setteback_supplier"] ?></div>
                                                 <?php
-                                                    }elseif(in_array('18',$services_confirmed)){
-                                                        $db = dbConn();
-                                                        $sql_supplier = "SELECT company_name FROM supplier "
-                                                                . "WHERE supplier_id IN "
-                                                                . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                                . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                                . "AND service_id='18' AND assign_status_id = '2')";
-                                                        $result_supplier = $db->query($sql_supplier);
-                                                        $row_supplier = $result_supplier->fetch_assoc();
-                                                        ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
-                                                    }
+                                                if (!empty($setteback_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
+                                                    ?>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
+                                                }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('18', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="setteback_supplier">Setteback</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='18' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1643,9 +1874,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="wed_photo_supplier">Wedding Photographer</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('23',$services_reject)){
-                                                    ?>
                                                 <select name="wed_photo_supplier" id="wed_photo_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1668,20 +1896,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_wed_photo_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('23',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='23' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($wed_photo_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('23', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="wed_photo_supplier">Wedding Photographer</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='23' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1697,9 +1947,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="ice_carve_supplier">Ice Carving</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('25',$services_reject)){
-                                                    ?>
                                                 <select name="ice_carve_supplier" id="ice_carve_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1722,20 +1969,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_ice_carve_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('25',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='25' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($ice_carve_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('25', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="ice_carve_supplier">Ice Carving</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='25' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1743,7 +2012,7 @@ var_dump($_POST);*/
                                 }
                                 ?>
                                 <?php
-                                if (($x != $y) && (in_array('26', $services_package) || in_array('26', $services_addon))) {
+                                if (($x != $y) && in_array('26',$services_reject) && (in_array('26', $services_package) || in_array('26', $services_addon))) {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="row mt-3">
@@ -1751,9 +2020,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="cham_fount_supplier">Champagne Fountain</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('26',$services_reject)){
-                                                    ?>
                                                 <select name="cham_fount_supplier" id="cham_fount_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1776,20 +2042,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_cham_fount_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('26',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='26' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($cham_fount_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('26', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="cham_fount_supplier">Champagne Fountain</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='26' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1797,7 +2085,7 @@ var_dump($_POST);*/
                                 }
                                 ?>
                                 <?php
-                                if (($x != $y) && (in_array('27', $services_package) || in_array('27', $services_addon))) {
+                                if (($x != $y) && in_array('27',$services_reject) && (in_array('27', $services_package) || in_array('27', $services_addon))) {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="row mt-3">
@@ -1805,9 +2093,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="a_flora_supplier">Artificial Flower Decorations</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('27',$services_reject)){
-                                                    ?>
                                                 <select name="a_flora_supplier" id="a_flora_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1830,20 +2115,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_a_flora_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('27',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='27' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($a_flora_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('27', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="a_flora_supplier">Artificial Flower Decorations</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='27' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1859,9 +2166,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="birth_cake_supplier">Birthday Cake Structure</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('28',$services_reject)){
-                                                    ?>
                                                 <select name="birth_cake_supplier" id="birth_cake_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1884,20 +2188,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_birth_cake_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('28',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='28' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($birth_cake_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('28', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="birth_cake_supplier">Birthday Cake Structure</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='28' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1905,7 +2231,7 @@ var_dump($_POST);*/
                                 }
                                 ?>
                                 <?php
-                                if (($x != $y) && (in_array('29', $services_package) || in_array('25', $services_addon))) {
+                                if (($x != $y) && in_array('29',$services_reject)  && (in_array('29', $services_package) || in_array('29', $services_addon))) {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="row mt-3">
@@ -1913,9 +2239,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="event_photo_supplier">Event Photographer</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('29',$services_reject)){
-                                                    ?>
                                                 <select name="event_photo_supplier" id="event_photo_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1938,20 +2261,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_event_photo_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('29',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='29' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($event_photo_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('29', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="event_photo_supplier">Event Photographer</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='29' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1959,7 +2304,7 @@ var_dump($_POST);*/
                                 }
                                 ?>
                                 <?php
-                                if (($x != $y) && (in_array('30', $services_package) || in_array('25', $services_addon))) {
+                                if (($x != $y) && in_array('30',$services_reject)  && (in_array('30', $services_package) || in_array('30', $services_addon))) {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="row mt-3">
@@ -1967,9 +2312,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="birth_photo_supplier">Birthday Photographer</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('30',$services_reject)){
-                                                    ?>
                                                 <select name="birth_photo_supplier" id="birth_photo_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -1992,20 +2334,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_birth_photo_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('30',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='30' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($birth_photo_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('30', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="birth_photo_supplier">Birthday Photographer</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='30' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -2013,7 +2377,7 @@ var_dump($_POST);*/
                                 }
                                 ?>
                                 <?php
-                                if (($x != $y) && (in_array('31', $services_package) || in_array('25', $services_addon))) {
+                                if (($x != $y) && in_array('31',$services_reject)  && (in_array('31', $services_package) || in_array('31', $services_addon))) {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="row mt-3">
@@ -2021,9 +2385,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="home_cake_supplier">Homecoming Cake Structure</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('31',$services_reject)){
-                                                    ?>
                                                 <select name="home_cake_supplier" id="home_cake_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -2046,20 +2407,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_home_cake_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('31',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='31' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($home_cake_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('31', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="home_cake_supplier">Homecoming Cake Structure</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='31' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -2067,7 +2450,7 @@ var_dump($_POST);*/
                                 }
                                 ?>
                                 <?php
-                                if (($x != $y) && (in_array('33', $services_package) || in_array('25', $services_addon))) {
+                                if (($x != $y) && in_array('33',$services_reject)  && (in_array('33', $services_package) || in_array('33', $services_addon))) {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="row mt-3">
@@ -2075,9 +2458,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="candle_deco_supplier">Candle Decorations</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('33',$services_reject)){
-                                                    ?>
                                                 <select name="candle_deco_supplier" id="candle_deco_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -2100,20 +2480,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_candle_deco_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('33',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='33' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($candle_deco_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('33', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="candle_deco_supplier">Candle Decorations</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='33' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -2121,7 +2523,7 @@ var_dump($_POST);*/
                                 }
                                 ?>
                                 <?php
-                                if (($x != $y) && (in_array('32', $services_package) || in_array('25', $services_addon))) {
+                                if (($x != $y) && in_array('32',$services_reject)  && (in_array('32', $services_package) || in_array('32', $services_addon))) {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="row mt-3">
@@ -2129,9 +2531,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="ballon_deco_supplier">Balloon Decoration</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('32',$services_reject)){
-                                                    ?>
                                                 <select name="ballon_deco_supplier" id="ballon_deco_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -2154,20 +2553,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_ballon_deco_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_array('32',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='32' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($ballon_deco_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('32', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="ballon_deco_supplier">Balloon Decoration</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='32' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -2175,7 +2596,7 @@ var_dump($_POST);*/
                                 }
                                 ?>
                                 <?php
-                                if (($x != $y) && (in_array('34', $services_package) || in_array('25', $services_addon))) {
+                                if (($x != $y) && in_array('34',$services_reject) && (in_array('34', $services_package) || in_array('34', $services_addon))) {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="row mt-3">
@@ -2183,9 +2604,6 @@ var_dump($_POST);*/
                                                 <label class="form-label" for="eng_photo_supplier">Engagement Photographer</label>
                                             </div>
                                             <div class="col-md-7 mb-3">
-                                                <?php
-                                                if(in_array('34',$services_reject)){
-                                                    ?>
                                                 <select name="eng_photo_supplier" id="eng_photo_supplier" class="form-control form-select" style="font-size:12px;" onchange="form.submit()">
                                                     <option value="">Select a Supplier</option>
                                                     <?php
@@ -2208,20 +2626,42 @@ var_dump($_POST);*/
                                                 </select>
                                                 <div class="text-danger"><?= @$message["error_eng_photo_supplier"] ?></div>
                                                 <?php
-                                                }elseif(in_srrsy('34',$services_confirmed)){
-                                                    $db = dbConn();
-                                                    $sql_supplier = "SELECT company_name FROM supplier "
-                                                            . "WHERE supplier_id IN "
-                                                            . "(SELECT supplier_id FROM arr_assign_supplier "
-                                                            . "WHERE arr_plan_id = '$arr_plan_id' "
-                                                            . "AND service_id='34' AND assign_status_id = '2')";
-                                                    $result_supplier = $db->query($sql_supplier);
-                                                    $row_supplier = $result_supplier->fetch_assoc();
+                                                if (!empty($eng_photo_supplier)) {
+                                                    $sql_con_status = "SELECT assignment_status FROM supplier_assignment_status WHERE assignment_id='1'";
+                                                    $result_con_status = $db->query($sql_con_status);
+                                                    $row_con_status = $result_con_status->fetch_assoc();
                                                     ?>
-                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
-                                                <?php
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <p><strong><i><?= $row_con_status['assignment_status'] ?></i></strong></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
                                                 }
                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } elseif (in_array('34', $services_confirmed)) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <div class="col-md-5 mb-3">
+                                                <label class="form-label" for="eng_photo_supplier">Engagement Photographer</label>
+                                            </div>
+                                            <div class="col-md-7 mb-3">
+                                                <?php
+                                                $db = dbConn();
+                                                $sql_supplier = "SELECT company_name FROM supplier "
+                                                        . "WHERE supplier_id IN "
+                                                        . "(SELECT supplier_id FROM arr_assign_supplier "
+                                                        . "WHERE arr_plan_id = '$arr_plan_id' "
+                                                        . "AND service_id='34' AND assign_status_id = '2')";
+                                                $result_supplier = $db->query($sql_supplier);
+                                                $row_supplier = $result_supplier->fetch_assoc();
+                                                ?>
+                                                <p><strong><i><?= $row_supplier['company_name'] ?> - Confirmed</i></strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -2252,7 +2692,7 @@ var_dump($_POST);*/
                 </div>
             </div>
         </div>
-        <div class="col-md-1"></div>
+        <div class="col-md-2"></div>
     </div>
 </main>
 

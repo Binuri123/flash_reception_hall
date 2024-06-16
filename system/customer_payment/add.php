@@ -5,7 +5,10 @@ include '../menu.php';
 ?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="mt-3 pagetitle">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="h4 m-0">Customer Payments</h1>
+        </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -14,11 +17,6 @@ include '../menu.php';
                 <li class="breadcrumb-item active" aria-current="page">Make a Payment</li>
             </ol>
         </nav>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Make a Payment</h3>
-        </div>
     </div>
     <?php
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -79,6 +77,16 @@ include '../menu.php';
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <div class="card bg-light" style="font-size:13px;">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">
+                                <h4>Make a Payment</h4>
+                            </div>
+                            <div class="col" style="text-align:right">
+                                <span class="text-danger">* Required</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data">
                             <div class="row">
@@ -158,7 +166,8 @@ include '../menu.php';
                             </div>
                             <div class="row">
                                 <div class="col-md-5 mb-3">
-                                    <label class="form-label">Payment Category</label>
+                                    
+                                    <label class="form-label"><span class="text-danger">* </span>Payment Category</label>
                                 </div>
                                 <div class="col-md-7 mb-3">
                                     <?php

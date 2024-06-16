@@ -3,7 +3,10 @@ include '../header.php';
 include '../menu.php';
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="mt-3 pagetitle">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="h4 m-0">Customer Payments</h1>
+        </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -12,26 +15,66 @@ include '../menu.php';
             </ol>
         </nav>
     </div>
+    <?php
+    extract($_POST);
+    //var_dump($_POST);
+    $where = NULL;
+    //echo 'outside';
+    if ($_SERVER['REQUEST_METHOD'] == "POST" && @$action == 'search') {
+        //echo 'inside';
+        $customer_no = cleanInput($customer_no);
+        $reservation_no = cleanInput($reservation_no);
+
+        if (!empty($customer_no)) {
+            //Wild card serach perform using like and %% signs
+            $where .= " p.customer_no LIKE '%$customer_no%' AND";
+        }
+
+        if (!empty($reservation_no)) {
+            //Wild card serach perform using like and %% signs
+            $where .= " r.reservation_no LIKE '%$reservation_no%' AND";
+        }
+
+        if (!empty($where)) {
+            $where = substr($where, 0, -3);
+            $where = " AND $where";
+        }
+    }
+    ?>
     <div class="row">
         <div class="col-md-12">
-            <h3>Pending Payments List</h3>
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
+                <div class="row mb-3 align-items-end">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Customer No" name="customer_no" value="<?= @$customer_no ?>" style="font-size:13px;font-style:italic;">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Reservation No" name="reservation_no" value="<?= @$reservation_no ?>" style="font-size:13px;font-style:italic;">
+                    </div>
+                    <div class="col d-flex">
+                        <button type="submit" name="action" value="search" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;font-style:italic;"><i class="bi bi-search"></i> Search</button>
+                        <a href="<?= $_SERVER['PHP_SELF'] ?>" class="btn btn-info btn-sm flex-grow-1 ms-2" style="font-size:13px;font-style:italic;"><i class="bi bi-eraser"></i> Clear</a>
+                    </div>
+                    <div class="col"></div>
+                </div>
+            </form>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-striped bg-light" style="font-size:13px;">
-                    <thead style="text-align:center;vertical-align:middle;" class="bg-secondary">
+                <table class="table modified table-striped table-sm" style="font-size:13px;">
+                    <thead class="bg-secondary text-white" style="font-size:13px;vertical-align: middle;text-align:center;">
                         <tr>
-                            <th>#</th>
-                            <th>Reservation No</th>
-                            <th>Event Date</th>
-                            <th>Reservation<br>Payment Status</th>
-                            <th>Total<br>Amount (Rs.)</th>
-                            <th>PaymentMade (Rs.)</th>
-                            <th>Last<br>Payment Date</th>
-                            <th>Payment Status</th>
-                            <th>Balance<br>to be Paid(Rs.)</th>
+                            <th scope="col">#</th>
+                            <th scope="col">Reservation No</th>
+                            <th scope="col">Event Date</th>
+                            <th scope="col">Reservation<br>Payment Status</th>
+                            <th scope="col">Total<br>Amount (Rs.)</th>
+                            <th scope="col">PaymentMade (Rs.)</th>
+                            <th scope="col">Last<br>Payment Date</th>
+                            <th scope="col">Payment Status</th>
+                            <th scope="col">Balance<br>to be Paid(Rs.)</th>
                             <?php
                             if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '4') {
                                 ?>
@@ -73,7 +116,7 @@ include '../menu.php';
                                 . "OR (p.payment_category_id='4' AND p.payment_method_id='2' AND p.payment_status = '3') "
                                 . "OR (p.payment_category_id='4' AND p.payment_method_id='3' AND p.payment_status = '3'))"
                                 . "AND r.reservation_payment_status_id != 4 AND r.reservation_payment_status_id != 5 "
-                                . "AND r.reservation_payment_status_id != 7 ORDER BY r.add_date DESC";
+                                . "AND r.reservation_payment_status_id != 7 $where ORDER BY r.add_date DESC";
                         //print_r($sql);
                         $result = $db->query($sql);
                         if ($result->num_rows > 0) {
@@ -132,14 +175,14 @@ include '../menu.php';
                                     if ($_SESSION['user_role_id'] == '1' || $_SESSION['user_role_id'] == '4') {
                                         if ($row['paid_status'] == NULL || $row['paid_status'] == '2') {
                                             ?>
-                                            <td>
-                                                <a href="<?= SYSTEM_PATH ?>customer_payment/add.php?reservation_no=<?= $row['reservation_no'] ?>" class="btn btn-success btn-sm" style="font-size:13px;text-align:center;vertical-align:middle;width:108px;">Make Payment</a>
+                                    <td class="d-flex">
+                                                <a href="<?= SYSTEM_PATH ?>customer_payment/add.php?reservation_no=<?= $row['reservation_no'] ?>" class="btn btn-success btn-sm flex-grow-1" style="font-size:13px;text-align:center;vertical-align:middle;">Make Payment</a>
                                             </td>
                                             <?php
                                         } elseif ($row['payment_method_id'] == '1' && ($row['paid_status'] == '1' || $row['paid_status'] == '3')) {
                                             ?>
-                                            <td>
-                                                <a href="<?= SYSTEM_PATH ?>customer_payment/edit.php?receipt_no=<?= $row['receipt_no'] ?>" class="btn btn-warning btn-sm" style="font-size:13px;text-align:center;vertical-align:middle;width:108px;">Edit Payment</a>
+                                            <td class="d-flex">
+                                                <a href="<?= SYSTEM_PATH ?>customer_payment/edit.php?receipt_no=<?= $row['receipt_no'] ?>" class="btn btn-warning btn-sm flex-grow-1" style="font-size:13px;text-align:center;vertical-align:middle;">Edit Payment</a>
                                             </td>
                                             <?php
                                         } else {

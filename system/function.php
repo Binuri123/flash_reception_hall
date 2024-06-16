@@ -311,3 +311,16 @@ function getNumRows($sqlStartWithFrom)
     $db->close();
     return $count;
 }
+
+function getArrStatusByServiceAndArrPlan($service_id,$arr_plan_id){
+    $db = dbConn();
+    $sql = "select
+    s.supplier_id,
+	s.company_name,
+	sas.assignment_status
+from arr_assign_supplier aas
+    inner join arrangement_plan ap on ap.arrangement_plan_id=aas.arr_plan_id
+	inner join supplier s on s.supplier_id=aas.supplier_id
+	inner join supplier_assignment_status sas on sas.assignment_id=aas.assign_status_id
+where ap.arrangement_plan_id=$arr_plan_id AND aas.service_id=$service_id";
+}

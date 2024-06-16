@@ -3,7 +3,10 @@ include '../header.php';
 include '../menu.php';
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="mt-3 pagetitle">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="h4 m-0">Customer Payments</h1>
+        </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= SYSTEM_PATH ?>index.php">Dashboard</a></li>
@@ -13,9 +16,9 @@ include '../menu.php';
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col">
                 <a href="<?= SYSTEM_PATH ?>customer_payment/pending.php" style="text-decoration:none;color:white">
-                    <div class="card bg-primary text-white">
+                    <div class="card bg-primary text-primary" style="--bs-bg-opacity: .1;">
                         <div class="card-body text-center">
                             <?php
                             $db = dbConn();
@@ -40,9 +43,9 @@ include '../menu.php';
                     </div>
                 </a>
             </div>
-            <div class="col-md-3">
+            <div class="col">
                 <a href="<?= SYSTEM_PATH ?>customer_payment/received.php" style="text-decoration:none;color:white">
-                    <div class="card bg-warning text-white">
+                    <div class="card bg-warning text-warning" style="--bs-bg-opacity: .1;">
                         <div class="card-body text-center">
                             <?php
                             $db = dbConn();
@@ -62,9 +65,9 @@ include '../menu.php';
                     </div>
                 </a>
             </div>
-            <div class="col-md-3">
+            <div class="col">
                 <a href="<?= SYSTEM_PATH ?>customer_payment/verified.php" style="text-decoration:none;color:white">
-                    <div class="card bg-success text-white">
+                    <div class="card bg-success text-success" style="--bs-bg-opacity: .1;">
                         <div class="card-body text-center">
                             <?php
                             $db = dbConn();
@@ -78,9 +81,9 @@ include '../menu.php';
                     </div>
                 </a>
             </div>
-            <div class="col-md-3">
+            <div class="col">
                 <a href="<?= SYSTEM_PATH ?>customer_payment/unsuccessful.php" style="text-decoration:none;color:white">
-                    <div class="card bg-danger text-white">
+                    <div class="card bg-danger text-danger" style="--bs-bg-opacity: .1;">
                         <div class="card-body text-center">
                             <?php
                             $db = dbConn();
